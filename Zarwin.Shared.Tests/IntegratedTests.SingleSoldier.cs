@@ -6,6 +6,7 @@ namespace Zarwin.Shared.Tests
     public partial class IntegratedTests
     {
         [Fact]
+        [Trait("grading", "v2")]
         public void OneSoldier_OneZombie_SoldierStompsZombie()
         {
             var input = new Parameters(
@@ -26,6 +27,7 @@ namespace Zarwin.Shared.Tests
         }
 
         [Fact]
+        [Trait("grading", "v2")]
         public void OneSoldier_OneZombie_SoldierGainsOneLevel()
         {
             var input = new Parameters(
@@ -45,6 +47,7 @@ namespace Zarwin.Shared.Tests
         }
 
         [Fact]
+        [Trait("grading", "v2")]
         public void OneSoldier_TwoZombies_NoWall_SoldierHurtedOnce_ThenWin()
         {
             var input = new Parameters(

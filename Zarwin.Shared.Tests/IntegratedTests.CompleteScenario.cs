@@ -12,6 +12,7 @@ namespace Zarwin.Shared.Tests
             {
                 yield return new Scenario(
                     "No Soldier",
+                    "v2",
 
                     new Parameters(
                         1,
@@ -30,6 +31,7 @@ namespace Zarwin.Shared.Tests
 
                 yield return new Scenario(
                     "1 Soldier, 1 Zombie, No Wall",
+                    "v2",
 
                     new Parameters(
                         1,
@@ -57,6 +59,7 @@ namespace Zarwin.Shared.Tests
 
                 yield return new Scenario(
                     "1 Soldier, 2 Zombies, No Wall",
+                    "v2",
 
                     new Parameters(
                         1,

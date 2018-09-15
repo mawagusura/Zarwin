@@ -6,6 +6,7 @@ namespace Zarwin.Shared.Tests
     public partial class IntegratedTests
     {
         [Fact]
+        [Trait("grading", "v2")]
         public void NoSoldier_InstantEnd()
         {
             var input = new Parameters(
@@ -21,6 +22,7 @@ namespace Zarwin.Shared.Tests
         }
 
         [Fact]
+        [Trait("grading", "v2")]
         public void OneSoldier_ExpectedInitialState()
         {
             var input = new Parameters(
@@ -40,6 +42,7 @@ namespace Zarwin.Shared.Tests
         }
 
         [Fact]
+        [Trait("grading", "final")]
         public void OneSoldier_FirstApproachTurnWithNoChange()
         {
             var input = new Parameters(

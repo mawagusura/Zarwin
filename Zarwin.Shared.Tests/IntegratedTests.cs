@@ -6,6 +6,7 @@ using Xunit.Abstractions;
 using Zarwin.Shared.Contracts;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
+using Zarwin.Shared.Tests.Infrastructure;
 
 namespace Zarwin.Shared.Tests
 {
@@ -13,7 +14,7 @@ namespace Zarwin.Shared.Tests
     {
         public abstract IInstantSimulator CreateSimulator();
 
-        [Theory]
+        [ScenarioTheory]
         [MemberData(nameof(ScenarioData), DisableDiscoveryEnumeration = false)]
         public void AllScenario(Scenario scenario)
         {
@@ -24,31 +25,30 @@ namespace Zarwin.Shared.Tests
 
         public class Scenario : IXunitSerializable
         {
-            private string name;
+            public string Name { get; private set; }
+            public string Version { get; private set; }
 
-            public override string ToString()
+            public override string ToString() => Name;
+
+            private Parameters _input;
+            private Result _expectedOuput;
+
+            public Scenario(string name, string version, Parameters input, Result expectedOuput)
             {
-                return name;
-            }
-
-            private Parameters input;
-            private Result expectedOuput;
-
-            public Scenario(string name, Parameters input, Result expectedOuput)
-            {
-                this.name = name;
-                this.input = input;
-                this.expectedOuput = expectedOuput;
+                Name = name;
+                Version = version;
+                _input = input;
+                _expectedOuput = expectedOuput;
             }
 
             public void Run(IInstantSimulator simulator)
             {
-                if (input == null || expectedOuput == null)
+                if (_input == null || _expectedOuput == null)
                     throw new InvalidOperationException("Cannot execute a scenario without input or expectedOutput");
 
-                var actualOutput = simulator.Run(input);
+                var actualOutput = simulator.Run(_input);
 
-                Assert.Equal(expectedOuput, actualOutput);
+                Assert.Equal(_expectedOuput, actualOutput);
             }
 
             #region IXunitSerializable
@@ -60,20 +60,22 @@ namespace Zarwin.Shared.Tests
 
             public void Serialize(IXunitSerializationInfo info)
             {
-                info.AddValue("name", name);
-                info.AddValue("input", JsonConvert.SerializeObject(input));
-                info.AddValue("expectedOutput", JsonConvert.SerializeObject(expectedOuput));
+                info.AddValue("name", Name);
+                info.AddValue("version", Version);
+                info.AddValue("input", JsonConvert.SerializeObject(_input));
+                info.AddValue("expectedOutput", JsonConvert.SerializeObject(_expectedOuput));
             }
 
             public void Deserialize(IXunitSerializationInfo info)
             {
-                this.name = info.GetValue<string>("name");
+                Name = info.GetValue<string>("name");
+                Version = info.GetValue<string>("version");
 
                 var jsonInput = info.GetValue<string>("input");
                 var jsonExpectedOutput = info.GetValue<string>("expectedOutput");
                 
-                this.input = JsonConvert.DeserializeObject<Parameters>(jsonInput);
-                this.expectedOuput = JsonConvert.DeserializeObject<Result>(jsonExpectedOutput);
+                _input = JsonConvert.DeserializeObject<Parameters>(jsonInput);
+                _expectedOuput = JsonConvert.DeserializeObject<Result>(jsonExpectedOutput);
             }
 
             #endregion IXunitSerializable

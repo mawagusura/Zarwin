@@ -6,13 +6,46 @@ namespace Zarwin.Shared.Grader
 {
     public class CompleteGrade
     {    
-        [JsonProperty("Note de qualité")]
+        [JsonProperty("Evaluation de qualité")]
         public Dictionary<string, double> QualityGrades { get; set; }
+
+        [JsonIgnore]
+        public double TestCoverage
+        {
+            get => QualityGrades["Tests unitaires"];
+            set => QualityGrades["Tests unitaires"] = value;
+        }
+
+        [JsonProperty("Coefficient de qualité")]
+        public double QualityRate => QualityGrades.Values.Average();
 
         [JsonProperty("Résultats des tests")]
         public Dictionary<string, TestResult> TestResults { get; set; }
 
-        [JsonProperty("Note actuelle")]
+        [JsonProperty("Note de livraison")]
+        public double DeliveryGrade
+        {
+            get
+            {
+                var deliveryRate = TestResults
+                    .Where(pair => pair.Key.StartsWith("Livraison "))
+                    .Average(result => (double?)result.Value.SuccessRate)
+                    ?? 1;
+
+                return deliveryRate * 10;
+            }
+        }
+
+        [JsonProperty("Note de complétude")]
+        public double CompletionGrade
+        {
+            get
+            {
+                return TestResults["Complétude"].SuccessRate * 10;
+            }
+        }
+
+        [JsonProperty("Note totale")]
         public double Grade
         {
             get
@@ -24,9 +57,7 @@ namespace Zarwin.Shared.Grader
 
                 var completeRate = TestResults["Complétude"].SuccessRate;
 
-                var qualityRate = QualityGrades.Values.Average();
-
-                return (deliveryRates + completeRate) * 10 * qualityRate;
+                return (DeliveryGrade + CompletionGrade) * QualityRate;
             }
         }
     }

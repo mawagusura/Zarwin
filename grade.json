@@ -1,5 +1,5 @@
 {
-  "Note de qualité": {
+  "Evaluation de qualité": {
     "Nommages variables": 1.0,
     "Nommages et types de membres": 1.0,
     "Structure fonctions": 1.0,
@@ -9,6 +9,7 @@
     "Encapsulation": 1.0,
     "Tests unitaires": 1.0
   },
+  "Coefficient de qualité": 1.0,
   "Résultats des tests": {
     "Complétude": {
       "Total": 1,
@@ -16,5 +17,7 @@
       "Taux": 1.0
     }
   },
-  "Note actuelle": 20.0
+  "Note de livraison": 10.0,
+  "Note de complétude": 10.0,
+  "Note totale": 20.0
 }

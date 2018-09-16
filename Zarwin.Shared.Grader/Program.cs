@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Zarwin.Shared.Grader
 {
@@ -23,13 +24,23 @@ namespace Zarwin.Shared.Grader
             "Tests unitaires"
         };
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            var branchName = args.Length > 0 ? args[0] : "master";
             var program = new Program(".", true, _currentVersion);
 
             var grade = ReadGrade() ?? new CompleteGrade();
             program.UpdateGrade(grade);
             WriteGrade(grade);
+
+            using (var badger = new Badger(branchName))
+            {
+                await badger.MakeGradeBadge(grade.Grade);
+                await badger.MakeCompletionBadge(grade.CompletionGrade);
+                await badger.MakeDeliveryBadge(grade.DeliveryGrade);
+                await badger.MakeQualityBadge(grade.QualityRate);
+                await badger.MakeCoverageBadge(grade.TestCoverage);
+            }
         }
 
         private static CompleteGrade ReadGrade()
@@ -76,7 +87,7 @@ namespace Zarwin.Shared.Grader
                 grade.TestResults[_completudeTests.GradeName] = _testRunner.RunTests(_completudeTests);
                 grade.TestResults[_currentVersionTests.GradeName] = _testRunner.RunTests(_currentVersionTests);
             }
-            grade.QualityGrades["Tests unitaires"] = _coverageRunner.Run(_completudeTests);
+            grade.TestCoverage = _coverageRunner.Run(_completudeTests);
         }
 
         public void InitializeGradeIfEmpty(CompleteGrade grade)

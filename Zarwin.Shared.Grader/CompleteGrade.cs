@@ -17,7 +17,8 @@ namespace Zarwin.Shared.Grader
         }
 
         [JsonProperty("Coefficient de qualité")]
-        public double QualityRate => QualityGrades.Values.Average();
+        public double QualityRate 
+            => 0.5 + 0.5 * QualityGrades.Values.Average();
 
         [JsonProperty("Résultats des tests")]
         public Dictionary<string, TestResult> TestResults { get; set; }

@@ -26,7 +26,7 @@ namespace Zarwin.Shared.Grader
 
         static async Task Main(string[] args)
         {
-            var branchName = args.Length > 0 ? args[0] : "master";
+            var branchName = args.Length > 0 ? args[0] : "local";
             var program = new Program(".", true, _currentVersion);
 
             var grade = ReadGrade() ?? new CompleteGrade();

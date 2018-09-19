@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Shared.Contracts", "Zarwin.Shared.Contracts\Zarwin.Shared.Contracts.csproj", "{F21B1295-1D6C-4359-A4AF-78CDC1DA2566}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zarwin.Shared.Contracts", "Zarwin.Shared.Contracts\Zarwin.Shared.Contracts.csproj", "{F21B1295-1D6C-4359-A4AF-78CDC1DA2566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Shared.Tests", "Zarwin.Shared.Tests\Zarwin.Shared.Tests.csproj", "{F9426D4C-60FE-4834-9AB4-CF24968463B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zarwin.Shared.Tests", "Zarwin.Shared.Tests\Zarwin.Shared.Tests.csproj", "{F9426D4C-60FE-4834-9AB4-CF24968463B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Core", "Zarwin.Core\Zarwin.Core.csproj", "{97C2DAD0-91ED-4F33-8764-442FB547C663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Core.Tests", "Zarwin.Core.Tests\Zarwin.Core.Tests.csproj", "{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{F9426D4C-60FE-4834-9AB4-CF24968463B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9426D4C-60FE-4834-9AB4-CF24968463B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9426D4C-60FE-4834-9AB4-CF24968463B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

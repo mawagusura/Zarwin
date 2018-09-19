@@ -6,16 +6,16 @@ namespace Zarwin.Core
     {
         private List<Zombie> zombies;
         private City city;
-        private Stack<Round> rounds;
+        private Queue<Round> rounds;
 
         public Wave(List<Zombie> zombies, City city)
         {
             this.zombies = zombies;
             this.city = city;
-            this.rounds = new List<Round>();
+            this.rounds = new Queue<Round>();
 
             //Add rounds
-            this.rounds.Push(new WarnRound());
+            this.rounds.Enqueue(new WarnRound());
 
             this.AddSoldiersZombieRound();
         }
@@ -32,7 +32,7 @@ namespace Zarwin.Core
             {
                 Console.WriteLine("Round {0}", i);
 
-                currentRound = this.rounds.Pop();
+                currentRound = this.rounds.Dequeue();
                 currentRound.Run();
 
                 Console.ReadLine();
@@ -67,8 +67,8 @@ namespace Zarwin.Core
     public void AddSoldiersZombieRound()
     {
         foreach(Soldier sold in city.GetSoldierAlive()){
-                this.rounds.Push(new SoldierRound(sold));
+                this.rounds.Enqueue(new SoldierRound(sold));
             }
-            this.rounds.Push(new ZombieRound());
+        this.rounds.Enqueue(new ZombieRound());
     }
 }

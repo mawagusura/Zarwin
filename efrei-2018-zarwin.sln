@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zarwin.Shared.Tests", "Zarw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Core", "Zarwin.Core\Zarwin.Core.csproj", "{97C2DAD0-91ED-4F33-8764-442FB547C663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Core.Tests", "Zarwin.Core.Tests\Zarwin.Core.Tests.csproj", "{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarwin.Core.Tests", "Zarwin.Core.Tests\Zarwin.Core.Tests.csproj", "{6C3982B6-549E-461E-B1EB-0EEA0C4EB3EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97C2DAD0-91ED-4F33-8764-442FB547C663}.Release|Any CPU.Build.0 = Release|Any CPU
-		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{532ADA0F-FD1B-4FC1-B61A-088B1663ABB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C3982B6-549E-461E-B1EB-0EEA0C4EB3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C3982B6-549E-461E-B1EB-0EEA0C4EB3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C3982B6-549E-461E-B1EB-0EEA0C4EB3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C3982B6-549E-461E-B1EB-0EEA0C4EB3EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

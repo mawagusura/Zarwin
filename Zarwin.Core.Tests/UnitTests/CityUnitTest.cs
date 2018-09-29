@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Zarwin.Core.entity
+namespace Zarwin.Core.Tests.UnitTests
 {
-    public class Zombie
+    public class CityUnitTest
     {
-
-
     }
 }

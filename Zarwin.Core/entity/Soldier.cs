@@ -5,7 +5,7 @@ using Zarwin.Shared.Contracts.Core;
 
 namespace Zarwin.Core.entity
 {
-    class Soldier : ISoldier
+    public class Soldier : ISoldier
     {
         // auto-increment id
         static int nextId = 1;
@@ -14,9 +14,11 @@ namespace Zarwin.Core.entity
 
         public int Id { get; private set; }
 
-        public int HealthPoints { get; set; };
+        public int HealthPoints { get; set; }
 
         public int Level { get; private set; } = 1;
+
+        public Boolean Alive = true;
 
         public Soldier()
         {
@@ -30,7 +32,15 @@ namespace Zarwin.Core.entity
         /// <param name="damage"></param>
         public void Hurt(int damage)
         {
-            HealthPoints -= damage;
+            if(damage > HealthPoints)
+            {
+                this.Alive = false;
+                this.HealthPoints = 0;
+            }
+            else
+            {
+                HealthPoints -= damage;
+            }
         }
 
         /// <summary>

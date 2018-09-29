@@ -4,15 +4,17 @@ using System.Text;
 
 namespace Zarwin.Core.entity
 {
-    class City
+    public class City
     {
+        private int baseWallHealthPoints = 10;
+
         public int WallHealthPoints { get; set; }
 
         public List<Soldier> soldiers { get; private set; }
 
         public City()
         {
-
+            WallHealthPoints = baseWallHealthPoints;
         }
     }
 }

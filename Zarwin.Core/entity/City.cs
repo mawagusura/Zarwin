@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Zarwin.Shared.Contracts.Core;
 
-namespace Zarwin.Core.entity
+namespace Zarwin.Core.Entity
 {
     public class City
     {
@@ -10,7 +11,7 @@ namespace Zarwin.Core.entity
 
         public int WallHealthPoints { get; set; }
 
-        public List<Soldier> soldiers { get; private set; }
+        public List<ISoldier> soldiers { get; private set; }
 
         public City()
         {

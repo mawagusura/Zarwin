@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Zarwin.Shared.Contracts.Core;
 
-namespace Zarwin.Core.entity
+namespace Zarwin.Core.Entity
 {
     public class Soldier : ISoldier
     {

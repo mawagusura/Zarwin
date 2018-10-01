@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Zarwin.Core.entity;
 
-namespace Zarwin.Core
+namespace Zarwin.Core.Engine
 {
     public class Wave
     {

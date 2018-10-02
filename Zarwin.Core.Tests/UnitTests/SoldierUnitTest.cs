@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using Zarwin.Core.entity;
+using Zarwin.Core.Entity;
 
 namespace Zarwin.Core.Tests.UnitTests
 {
@@ -22,7 +22,7 @@ namespace Zarwin.Core.Tests.UnitTests
         public void hurtMoreThanHealth()
         {
             soldier.Hurt(soldier.HealthPoints+1);
-            Assert.False(soldier.Alive);
+            Assert.True(soldier.HealthPoints==0);
         }
     }
 }

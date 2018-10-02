@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Zarwin.Shared.Contracts.Core;
+using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Entity
@@ -12,20 +14,36 @@ namespace Zarwin.Core.Entity
 
         public int WallHealthPoints { get; set; }
 
-        public List<ISoldier> Soldiers { get; private set; }
-        public City()
+        public List<Soldier> Soldiers { get; private set; }
+
+        public List<Soldier> AliveSoldiers => Soldiers.Where(Alive => true).ToList();
+
+        public List<SoldierState> SoldierState
         {
-            WallHealthPoints = baseWallHealthPoints;
+            get
+            {
+                List<SoldierState> states = new List<SoldierState>();
+                Soldiers.ForEach(sold => states.Add(new SoldierState(sold.Id, sold.Level, sold.HealthPoints)));
+                return states;
+            }
         }
 
-        public List<SoldierState> GetSoldierStates()
+        /// <summary>
+        /// Constructor of the City class
+        /// </summary>
+        /// <param name="soldierParameters"></param>
+        public City(List<SoldierParameters> soldierParameters)
         {
-            List<SoldierState> states = new List<SoldierState>();
-            foreach (ISoldier sold in Soldiers)
-            {
-                states.Add(new SoldierState(sold.Id, sold.Level, sold.HealthPoints));
-            }
-            return states;
+            WallHealthPoints = baseWallHealthPoints;
+
+            // initilaize Soldiers with parameters
+            soldierParameters.ForEach(sp => Soldiers.Add(new Soldier(sp.Id, sp.Level)));
+
+        }
+
+        public void HurtWall(int amount)
+        {
+            WallHealthPoints= amount > WallHealthPoints ?  0 : WallHealthPoints - amount;
         }
 
     }

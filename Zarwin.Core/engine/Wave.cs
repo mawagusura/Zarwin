@@ -27,7 +27,11 @@ namespace Zarwin.Core.Engine
             this.console = console;
 
             //Create InitialResult
+<<<<<<< Updated upstream
             this.initialResult = new TurnResult(city.GetSoldierStates().ToArray(), new HordeState(zombies.Count()), city.WallHealthPoints);
+=======
+            this.initialResult = new TurnResult(city.SoldierState.ToArray(),new HordeState(zombies.Count()),city.WallHealthPoints);
+>>>>>>> Stashed changes
 
             //Add rounds
             this.rounds.Enqueue(new WarnRound());

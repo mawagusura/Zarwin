@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Zarwin.Core.entity;
+using Zarwin.Core.Entity;
 
 namespace Zarwin.Core.Engine
 {

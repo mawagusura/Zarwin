@@ -19,7 +19,7 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Hurt more than solider
         /// </summary>
         [Fact]
-        public void hurtMoreThanHealth()
+        public void HurtMoreThanHealth()
         {
             soldier.Hurt(soldier.HealthPoints+1);
             Assert.True(soldier.HealthPoints==0);

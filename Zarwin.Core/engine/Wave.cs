@@ -36,7 +36,7 @@ namespace Zarwin.Core.Engine
             this.TurnResults.Add(this.CurrentTurnResult());
 
             //Rounds
-            while (this.zombies.Count() > 0 && )
+            while (this.zombies.Count() > 0)
             {
                 
                 if (this.console)

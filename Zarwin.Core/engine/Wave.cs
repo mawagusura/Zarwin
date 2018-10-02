@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zarwin.Core.Entity;
+using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine
@@ -10,21 +11,23 @@ namespace Zarwin.Core.Engine
     {
         private List<Zombie> zombies;
         private readonly City city;
-        private Queue<Round> rounds;
+        private Queue<Turn> rounds;
+
         private readonly TurnResult initialResult;
         private TurnResult[] turnsResult;
+
         private readonly Boolean console;
 
 
-        public Wave(List<Zombie> zombies, City city,Boolean console)
+        public Wave(HordeParameters hordeParameter, City city, Boolean console)
         {
-            this.zombies = zombies;
+            this.zombies = Enumerable.Repeat(new Zombie(), hordeParameter.Size).ToList();
             this.city = city;
-            this.rounds = new Queue<Round>();
+            this.rounds = new Queue<Turn>();
             this.console = console;
 
             //Create InitialResult
-            this.initialResult = new TurnResult(city.GetSoldierStates().ToArray(),new HordeState(zombies.Count()),city.WallHealthPoints);
+            this.initialResult = new TurnResult(city.GetSoldierStates().ToArray(), new HordeState(zombies.Count()), city.WallHealthPoints);
 
             //Add rounds
             this.rounds.Enqueue(new WarnRound());
@@ -39,7 +42,7 @@ namespace Zarwin.Core.Engine
             this.BeginningWave();
 
             int i = 1;
-            Round currentRound;
+            Turn currentRound;
             //Rounds
             while (this.zombies.size() > 0)
             {
@@ -55,33 +58,39 @@ namespace Zarwin.Core.Engine
             this.EndWave();
         }
 
-    }
 
-    private void BeginningWave()
-    {
-        Console.WriteLine("Beginning of the wave");
-        Console.ReadLine();
-    }
-
-    private void EndWave()
-    {
-        Console.WriteLine("End of the wave");
-        Console.ReadLine();
-    }
-
-    public void AddRound(List<Round> newRounds)
-    {
-        foreach (Round round in newRounds)
+        private void BeginningWave()
         {
-            this.rounds.Push(round);
+            Console.WriteLine("Beginning of the wave");
+            Console.ReadLine();
         }
-    }
 
-    public void AddSoldiersZombieRound()
-    {
-        foreach(Soldier sold in city.GetSoldierAlive()){
+        private void EndWave()
+        {
+            Console.WriteLine("End of the wave");
+            Console.ReadLine();
+        }
+
+        public void AddRound(List<Turn> newRounds)
+        {
+            foreach (Turn round in newRounds)
+            {
+                this.rounds.Push(round);
+            }
+        }
+
+        public void AddSoldiersZombieRound()
+        {
+            foreach (Soldier sold in city.GetSoldierAlive())
+            {
                 this.rounds.Enqueue(new SoldierRound(sold));
             }
-        this.rounds.Enqueue(new ZombieRound());
+            this.rounds.Enqueue(new ZombieRound());
+        }
+
+        private HordeState CreateHordeState()
+        {
+            return new HordeState(this.zombies.Count());
+        }
     }
 }

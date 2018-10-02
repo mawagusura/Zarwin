@@ -10,7 +10,7 @@ namespace Zarwin.Core.Entity
         // auto-increment id
         static int nextId = 1;
 
-        private int maxHealthPoints { get; set; } = 3;
+        private int MaxHealthPoints { get; set; } = 3;
 
         public int Id { get; private set; }
 
@@ -23,7 +23,7 @@ namespace Zarwin.Core.Entity
         public Soldier()
         {
             Id = nextId++;
-            HealthPoints = maxHealthPoints;
+            HealthPoints = MaxHealthPoints;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Zarwin.Core.Entity
         public void LevelUp()
         {
             Level++;
-            if(HealthPoints < maxHealthPoints) HealthPoints++;
-            maxHealthPoints += Level;
+            if(HealthPoints < MaxHealthPoints) HealthPoints++;
+            MaxHealthPoints += Level;
         }
     }
 }

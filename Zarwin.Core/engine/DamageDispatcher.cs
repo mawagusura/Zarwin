@@ -8,17 +8,23 @@ namespace Zarwin.Core.Engine
 {
     class DamageDispatcher : IDamageDispatcher
     {
+        private ItemSelector Selector { get; set; }
+
+        public DamageDispatcher(ItemSelector sel)
+        {
+            this.Selector = sel;
+        }
+
         void IDamageDispatcher.DispatchDamage(int damage, IEnumerable<ISoldier> soldiers)
         {
             while (damage > 0 && soldiers.Sum(soldier => soldier.HealthPoints) > 0)
             {
-                Random rnd = new Random();
                 ISoldier chosenSoldier;
                 do
                 {
-                    chosenSoldier = soldiers.ElementAt(rnd.Next(0, soldiers.Count()));
+                    chosenSoldier = Selector.SelectItem(soldiers);
 
-                } while (chosenSoldier.HealthPoints>0);
+                } while (chosenSoldier.HealthPoints==0);
                 int damageDealt = Math.Min(damage, chosenSoldier.HealthPoints);
 
                 chosenSoldier.Hurt(damageDealt);

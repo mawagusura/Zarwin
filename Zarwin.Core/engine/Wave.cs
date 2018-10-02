@@ -14,6 +14,7 @@ namespace Zarwin.Core.Engine
 
         private TurnResult InitialResult { get; }
         private List<TurnResult> TurnResults { get; }
+        private HordeState HordeState() => new HordeState(this.zombies.Count());
 
         private readonly Boolean console;
 
@@ -25,35 +26,39 @@ namespace Zarwin.Core.Engine
             this.console = console;
 
             //Create InitialResult
-            this.InitialResult = new TurnResult(city.GetSoldierStates().ToArray(), new HordeState(zombies.Count()), city.WallHealthPoints);
+            this.InitialResult = new TurnResult(city.SoldierState.ToArray(), new HordeState(zombies.Count()), city.WallHealthPoints);
         }
 
         public void Run()
         {
-            //Beginning of the wave
-            this.BeginningWave();
+            //ApproachTurn
+            ApproachTurn();
+            this.TurnResults.Add(this.CurrentTurnResult());
 
-            int i = 1;
-            Turn currentRound;
             //Rounds
-            while (this.zombies.size() > 0)
+            while (this.zombies.Count() > 0)
             {
-                Console.WriteLine("Round {0}", i);
-
-                currentRound = this.rounds.Dequeue();
-                currentRound.Run();
-
-                Console.ReadLine();
+                
+                if (this.console)
+                {
+                    Console.ReadLine();
+                }
+                
             }
             
         }
-
         
-        public 
+        private TurnResult CurrentTurnResult()
+            => new TurnResult(this.city.SoldierState.ToArray(), this.HordeState(), this.city.WallHealthPoints);
 
-        private HordeState CreateHordeState()
+        private void ApproachTurn()
         {
-            return new HordeState(this.zombies.Count());
+            Console.WriteLine("Horde in approach");
+            if (this.console)
+            {
+                Console.ReadLine();
+            }
         }
+
     }
 }

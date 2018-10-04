@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Zarwin.Core.Entity;
+﻿using System.Collections.Generic;
+using Zarwin.Shared.Contracts.Input;
 
 namespace Zarwin.Core.Engine
 {
@@ -10,12 +8,21 @@ namespace Zarwin.Core.Engine
 
         public static int Main()
         {
+            Simulator sim = new Simulator(true);
+            List<SoldierParameters> soldiers=new List<SoldierParameters>();
+            for(int i = 1; i <= 10; i++)
+            {
+                soldiers.Add(new SoldierParameters(i, 1));
+            }
 
-            Soldier s1 = new Soldier();
-            Console.WriteLine("Soldier " + s1.Id + "created. Health : "+s1.HealthPoints);
-            s1.Hurt(1);
-            Console.WriteLine("New Health : "+s1.HealthPoints);
-            Console.ReadLine();
+            /*
+             * Run a simulation with:
+             * 100 waves
+             * 10 zombies per wave
+             * 10 HP in the city
+             * 10 soldiers at level 1
+             */
+            sim.Run(new Parameters(100,new DamageDispatcher(new ItemSelector()),new HordeParameters(10),new CityParameters(10), soldiers.ToArray()));
 
             return 0;
         }

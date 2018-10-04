@@ -6,6 +6,10 @@ namespace Zarwin.Core.Engine
     {
         public ApproachTurn(Wave wave) : base(wave){}
 
+        /// <summary>
+        /// Send a message to announce the hord
+        /// </summary>
+        /// <returns></returns>
         public override TurnResult Run()
         {
             Printer.PrintMessage("Horde in approach");

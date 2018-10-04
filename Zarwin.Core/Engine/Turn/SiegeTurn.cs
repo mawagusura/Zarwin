@@ -7,6 +7,10 @@ namespace Zarwin.Core.Engine
     {
         public SiegeTurn(Wave wave) : base(wave){}
 
+        /// <summary>
+        /// Run the turn of the soldier phase and zombie phase
+        /// </summary>
+        /// <returns></returns>
         public override TurnResult Run()
         {
             this.SoldierPhase();
@@ -15,6 +19,9 @@ namespace Zarwin.Core.Engine
             return this.wave.CurrentTurnResult();
         }
 
+        /// <summary>
+        /// Each soldier alive attack the horde
+        /// </summary>
         private void SoldierPhase()
         {
             foreach (Soldier soldier in this.wave.City.Soldiers)
@@ -22,13 +29,16 @@ namespace Zarwin.Core.Engine
                 if (soldier.HealthPoints > 0)
                 {
                     Printer.PrintMessage("Solider " + soldier.Id + "kills " + soldier.AttackPoints + "zombies");
-                    this.wave.KillZombie(soldier);
+                    this.wave.KillZombies(soldier);
 
                     this.wave.WaitPlayer();
                 }
             }
         }
 
+        /// <summary>
+        /// The horde attack the wall, if the city got one, else they attack the soldiers.
+        /// </summary>
         private void ZombiePhase()
         {
             if (this.wave.City.WallHealthPoints > 0)

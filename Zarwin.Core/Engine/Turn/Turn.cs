@@ -10,6 +10,10 @@ namespace Zarwin.Core.Engine
     {
         protected Wave wave;
 
+        /// <summary>
+        /// The base of each turn
+        /// </summary>
+        /// <param name="wave"></param>
         public Turn(Wave wave)
         {
             this.wave = wave;

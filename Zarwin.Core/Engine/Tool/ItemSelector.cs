@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Zarwin.Core.Engine
 {
     class ItemSelector
     {
+        /// <summary>
+        /// Select one item randomly from a list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public T SelectItem<T>(IEnumerable<T> list)
         {
             Random rnd = new Random();

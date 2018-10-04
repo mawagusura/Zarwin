@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit;
 using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Input;

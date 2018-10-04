@@ -18,6 +18,8 @@ namespace Zarwin.Core.Entity
 
         private int MaxHealthPoints => 3 + Level;
 
+        //Attack points start from 1 and up by 1 every 10 level
+        //(lvl:11 = 2d, lvl:21 = 3d ...)
         public int AttackPoints => (int)  (1 + Math.Floor((decimal) (Level - 1) / 10));
 
         public Soldier()
@@ -26,6 +28,10 @@ namespace Zarwin.Core.Entity
             HealthPoints = MaxHealthPoints;
         }
 
+        /// <summary>
+        /// Create a soldier based on parameter
+        /// </summary>
+        /// <param name="soldierParameters"></param>
         public Soldier(SoldierParameters soldierParameters)
         {
             if (soldierParameters.Id < 0 || soldierParameters.Level < 1) throw new WrongParameterException("Parameters with wrong values");
@@ -55,6 +61,10 @@ namespace Zarwin.Core.Entity
             if(HealthPoints < MaxHealthPoints) HealthPoints++;
         }
 
+        /// <summary>
+        /// Raise the level n times
+        /// </summary>
+        /// <param name="levelToUp"></param>
         public void LevelUp(int levelToUp)
         {
             for(int i = 0; i < levelToUp; i++)

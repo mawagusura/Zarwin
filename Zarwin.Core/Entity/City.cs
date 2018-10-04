@@ -49,6 +49,10 @@ namespace Zarwin.Core.Entity
             WallHealthPoints= amount > WallHealthPoints ?  0 : WallHealthPoints - amount;
         }
 
+        /// <summary>
+        /// Test is the game is over, there is no soldier or there are all dead
+        /// </summary>
+        /// <returns></returns>
         public Boolean GameOver()
         {
             return (this.Soldiers.Sum(soldier => soldier.HealthPoints) == 0) || (this.Soldiers.Count==0);

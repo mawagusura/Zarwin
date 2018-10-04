@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Zarwin.Core.Entity;
 using Zarwin.Core.Exceptions;
@@ -120,8 +118,8 @@ namespace Zarwin.Core.Tests.UnitTests
         [InlineData(21)]
         public void VerifyAttackPoints(int level)
         {
-            soldier = new Soldier();
-            Assert.Equal((int)(1 + Math.Floor((decimal)(soldier.Level) / 10)), soldier.AttackPoints);
+            soldier = new Soldier(new SoldierParameters(0,level));
+            Assert.Equal((int)(1 + Math.Floor((decimal)(soldier.Level-1) / 10)), soldier.AttackPoints);
         }
     }
 }

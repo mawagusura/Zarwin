@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Zarwin.Shared.Tests\Zarwin.Shared.Tests.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IntegrationTests\" />
-  </ItemGroup>
-
 </Project>

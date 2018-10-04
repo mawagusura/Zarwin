@@ -1,4 +1,5 @@
-﻿using Zarwin.Core.Entity;
+﻿using System;
+using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine
@@ -14,6 +15,10 @@ namespace Zarwin.Core.Engine
         public override TurnResult Run()
         {
             this.SoldierPhase();
+            if (this.wave.WaveOver())
+            {
+                return this.wave.CurrentTurnResult();
+            }
             this.ZombiePhase();
 
             return this.wave.CurrentTurnResult();
@@ -28,7 +33,7 @@ namespace Zarwin.Core.Engine
             {
                 if (soldier.HealthPoints > 0)
                 {
-                    Printer.PrintMessage("Solider " + soldier.Id + "kills " + soldier.AttackPoints + "zombies");
+                    Printer.PrintMessage("Solider n°" + soldier.Id + " attacks");
                     this.wave.KillZombies(soldier);
 
                     this.wave.WaitPlayer();

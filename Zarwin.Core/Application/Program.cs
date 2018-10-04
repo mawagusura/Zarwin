@@ -8,22 +8,28 @@ namespace Zarwin.Core.Engine
 
         public static int Main()
         {
+            Printer.PrintMessage("Start");
+
             Simulator sim = new Simulator(true);
             List<SoldierParameters> soldiers=new List<SoldierParameters>();
-            for(int i = 1; i <= 10; i++)
+            for(int i = 1; i <= 2; i++)
             {
                 soldiers.Add(new SoldierParameters(i, 1));
             }
 
             /*
              * Run a simulation with:
-             * 100 waves
-             * 10 zombies per wave
-             * 10 HP in the city
-             * 10 soldiers at level 1
+             * 5 waves
+             * 5 zombies per wave
+             * 3 HP in the city
+             * 2 soldiers at level 1
              */
-            sim.Run(new Parameters(100,new DamageDispatcher(new ItemSelector()),new HordeParameters(10),new CityParameters(10), soldiers.ToArray()));
+            sim.Run(new Parameters(5,new DamageDispatcher(new ItemSelector()),new HordeParameters(5),new CityParameters(3
+                
+                
+                ), soldiers.ToArray()));
 
+            Printer.PrintMessage("End");
             return 0;
         }
     }

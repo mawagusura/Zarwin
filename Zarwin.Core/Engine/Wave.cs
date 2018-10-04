@@ -10,7 +10,7 @@ namespace Zarwin.Core.Engine
 {
     public class Wave
     {
-        public List<Zombie> Zombies { get; }
+        public int Zombies { get; set; }
         public City City { get; }
         private readonly Boolean waiting;
 
@@ -18,19 +18,21 @@ namespace Zarwin.Core.Engine
         public IDamageDispatcher Dispatcher { get; }
         private TurnResult InitialResult { get; }
         private List<TurnResult> TurnResults { get; }
-        private Queue<Turn> turns;
+
+        private readonly Queue<Turn> turns;
 
 
         public Wave(HordeParameters hordeParameter, City city, IDamageDispatcher dispatcher, Boolean waiting)
         {
-            this.Zombies = Enumerable.Repeat(new Zombie(), hordeParameter.Size).ToList();
+            this.Zombies = hordeParameter.Size;
             this.City = city;
             this.waiting = waiting;
             this.Dispatcher = dispatcher;
+            this.turns = new Queue<Turn>();
 
             this.turns.Enqueue(new ApproachTurn(this));
             //Create InitialResult
-            this.InitialResult = new TurnResult(city.SoldierState.ToArray(), new HordeState(Zombies.Count()), city.WallHealthPoints);
+            this.InitialResult = new TurnResult(city.SoldierState.ToArray(), new HordeState(Zombies), city.WallHealthPoints);
 
         }
 
@@ -38,9 +40,8 @@ namespace Zarwin.Core.Engine
         public WaveResult Run()
         {
             Turn currentTurn=this.turns.Dequeue();
-            TurnResult tmpTurnResult;
 
-            while (this.Zombies.Count() > 0 && this.City.Soldiers.Sum(soldier => soldier.HealthPoints) > 0)
+            while (!this.WaveOver() && !this.City.GameOver())
             {
                 if (currentTurn.Equals(null))
                 {
@@ -48,20 +49,15 @@ namespace Zarwin.Core.Engine
                     throw new UnreachableCodeException("Win condition failed, dequeue null turn");
                 }
 
-                tmpTurnResult=currentTurn.Run();
-                if (tmpTurnResult == null)
-                {
-                    //The wave is over, all zombies died or all soldiers
-                    break;
-                }
-
                 //Save the turn
-                this.TurnResults.Add(tmpTurnResult);
+                this.TurnResults.Add(currentTurn.Run());
 
                 currentTurn = this.turns.Dequeue();
             }
             return new WaveResult(this.InitialResult,this.TurnResults.ToArray());
         }
+
+        public Boolean WaveOver() => this.Zombies == 0;
 
         public void EnqueueCompleteRound()
         {
@@ -76,8 +72,20 @@ namespace Zarwin.Core.Engine
             this.turns.Enqueue(new ZombieTurn(this));
         }
 
+        public void KillZombie(int attackPoints)
+        {
+            if (this.Zombies < attackPoints)
+            {
+                this.Zombies = 0;
+            }
+            else
+            {
+                this.Zombies -= attackPoints;
+            }
+        }
+
         //States 
-        private HordeState HordeState() => new HordeState(this.Zombies.Count());
+        private HordeState HordeState() => new HordeState(this.Zombies);
 
         public TurnResult CurrentTurnResult()
            => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints);

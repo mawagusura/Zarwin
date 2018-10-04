@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Zarwin.Core.Entity;
+﻿using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine
@@ -17,23 +14,12 @@ namespace Zarwin.Core.Engine
 
         public override TurnResult Run()
         {
-            if (soldier.AttackPoints >= this.wave.Zombies.Count)
-            {
-                Printer.PrintMessage("Solider " + soldier.Id + " kills " + Math.Min(this.wave.Zombies.Count, soldier.AttackPoints) + " zombie(s)");
-                this.wave.Zombies.Clear();
-            }
-            else
-            {
-                Printer.PrintMessage("Solider " + soldier.Id + "kills " + soldier.AttackPoints + "zombies");
-                for (int i = 0; i < soldier.AttackPoints; i++)
-                {
-                    this.wave.Zombies.RemoveAt(0);
-                }
-            }
+            Printer.PrintMessage("Solider " + soldier.Id + "kills " + soldier.AttackPoints + "zombies");
+            this.wave.KillZombie(soldier.AttackPoints);
 
             this.wave.WaitPlayer();
 
-            return (this.wave.Zombies.Count > 0) ? this.wave.CurrentTurnResult() : null;
+            return this.wave.CurrentTurnResult();
         }
     }
 }

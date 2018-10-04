@@ -49,5 +49,9 @@ namespace Zarwin.Core.Entity
             WallHealthPoints= amount > WallHealthPoints ?  0 : WallHealthPoints - amount;
         }
 
+        public Boolean GameOver()
+        {
+            return this.Soldiers.Sum(soldier => soldier.HealthPoints) > 0;
+        }
     }
 }

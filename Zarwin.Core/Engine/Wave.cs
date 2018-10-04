@@ -19,59 +19,42 @@ namespace Zarwin.Core.Engine
         private TurnResult InitialResult { get; set; }
         private List<TurnResult> TurnResults { get; }
 
-        private readonly Queue<Turn> turns;
-
-
         public Wave(HordeParameters hordeParameter, City city, IDamageDispatcher dispatcher, Boolean waiting)
         {
             this.Zombies = hordeParameter.Size;
             this.City = city;
             this.waiting = waiting;
             this.Dispatcher = dispatcher;
-            this.turns = new Queue<Turn>();
 
             this.InitialResult = this.CurrentTurnResult();
 
             this.TurnResults = new List<TurnResult>();
-            this.turns.Enqueue(new ApproachTurn(this));
         }
 
 
         public WaveResult Run()
         {
-            this.TurnResults.Add(this.turns.Dequeue().Run());
-            this.EnqueueCompleteRound();
-            while (this.turns.Count>0 && this.WaveOver() && this.City.GameOver())
+            this.TurnResults.Add(new ApproachTurn(this).Run());
+            while (!this.WaveOver())
             {
-                this.TurnResults.Add(this.turns.Dequeue().Run());
+                this.TurnResults.Add(new SiegeTurn(this).Run());
             }
             return new WaveResult(this.InitialResult,this.TurnResults.ToArray());
         }
 
         public Boolean WaveOver() => this.Zombies == 0;
 
-        public void EnqueueCompleteRound()
+        public void KillZombie(Soldier soldier)
         {
-            foreach (Soldier soldier in this.City.Soldiers)
+            if (this.Zombies < soldier.AttackPoints)
             {
-                if (soldier.HealthPoints > 0)
-                {
-                    this.turns.Enqueue(new SoldierTurn(this, soldier));
-                }
-            }
-
-            this.turns.Enqueue(new ZombieTurn(this));
-        }
-
-        public void KillZombie(int attackPoints)
-        {
-            if (this.Zombies < attackPoints)
-            {
+                soldier.LevelUp(this.Zombies);
                 this.Zombies = 0;
             }
             else
             {
-                this.Zombies -= attackPoints;
+                this.Zombies -= soldier.AttackPoints;
+                soldier.LevelUp(soldier.AttackPoints);
             }
         }
 

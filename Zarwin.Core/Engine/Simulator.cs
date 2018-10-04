@@ -18,7 +18,6 @@ namespace Zarwin.Core.Engine
             {
                 waveResults.Add(new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, false).Run());
             }
-            Debug.WriteLine(new Result(waveResults.ToArray()));
             return new Result(waveResults.ToArray());
         }
     }

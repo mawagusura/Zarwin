@@ -54,5 +54,13 @@ namespace Zarwin.Core.Entity
             Level++;
             if(HealthPoints < MaxHealthPoints) HealthPoints++;
         }
+
+        public void LevelUp(int levelToUp)
+        {
+            for(int i = 0; i < levelToUp; i++)
+            {
+                this.LevelUp();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts;
 using Zarwin.Shared.Contracts.Input;
@@ -12,13 +13,12 @@ namespace Zarwin.Core.Engine
         {
             City city = new City(parameters.CityParameters, new List<SoldierParameters>(parameters.SoldierParameters));
             List<WaveResult> waveResults = new List<WaveResult>();
-
-            WaveResult wave=null;
+            
             for (int i = 0; i < parameters.WavesToRun; i++)
             {
-                wave = new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, false).Run();
+                waveResults.Add(new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, false).Run());
             }
-                waveResults.Add(wave);
+            Debug.WriteLine(new Result(waveResults.ToArray()));
             return new Result(waveResults.ToArray());
         }
     }

@@ -29,18 +29,19 @@ namespace Zarwin.Core.Engine
             this.waiting = waiting;
             this.Dispatcher = dispatcher;
             this.turns = new Queue<Turn>();
-            this.TurnResults = new List<TurnResult>();
 
+            this.InitialResult = this.CurrentTurnResult();
+
+            this.TurnResults = new List<TurnResult>();
             this.turns.Enqueue(new ApproachTurn(this));
         }
 
 
         public WaveResult Run()
         {
-            Turn currentTurn=this.turns.Dequeue();
-            this.InitialResult = currentTurn.Run();
-
-            while (this.turns.Count>0 && this.WaveOver())
+            this.TurnResults.Add(this.turns.Dequeue().Run());
+            this.EnqueueCompleteRound();
+            while (this.turns.Count>0 && this.WaveOver() && this.City.GameOver())
             {
                 this.TurnResults.Add(this.turns.Dequeue().Run());
             }

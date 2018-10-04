@@ -10,8 +10,6 @@ namespace Zarwin.Core.Engine
         {
             Printer.PrintMessage("Horde in approach");
             this.wave.WaitPlayer();
-
-            this.wave.EnqueueCompleteRound();
             return this.wave.CurrentTurnResult();
         }
     }

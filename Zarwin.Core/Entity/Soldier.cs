@@ -31,7 +31,8 @@ namespace Zarwin.Core.Entity
             if (soldierParameters.Id < 0 || soldierParameters.Level < 1) throw new WrongParameterException("Parameters with wrong values");
 
             Id = soldierParameters.Id;
-            Level = soldierParameters.Level;            
+            Level = soldierParameters.Level;
+            HealthPoints = MaxHealthPoints;
         }
 
         /// <summary>

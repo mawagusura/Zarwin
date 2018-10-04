@@ -44,6 +44,7 @@ namespace Zarwin.Core.Tests.UnitTests
             soldier = new Soldier(new SoldierParameters(2, 2));
             Assert.Equal(2, soldier.Id);
             Assert.Equal(2, soldier.Level);
+            Assert.Equal(5, soldier.HealthPoints);
         }
 
         [Fact]

@@ -16,7 +16,7 @@ namespace Zarwin.Core.Engine
 
 
         public IDamageDispatcher Dispatcher { get; }
-        private TurnResult InitialResult { get; }
+        private TurnResult InitialResult { get; set; }
         private List<TurnResult> TurnResults { get; }
 
         private readonly Queue<Turn> turns;
@@ -29,30 +29,20 @@ namespace Zarwin.Core.Engine
             this.waiting = waiting;
             this.Dispatcher = dispatcher;
             this.turns = new Queue<Turn>();
+            this.TurnResults = new List<TurnResult>();
 
             this.turns.Enqueue(new ApproachTurn(this));
-            //Create InitialResult
-            this.InitialResult = new TurnResult(city.SoldierState.ToArray(), new HordeState(Zombies), city.WallHealthPoints);
-
         }
 
 
         public WaveResult Run()
         {
             Turn currentTurn=this.turns.Dequeue();
+            this.InitialResult = currentTurn.Run();
 
-            while (!this.WaveOver() && !this.City.GameOver())
+            while (this.turns.Count>0 && this.WaveOver())
             {
-                if (currentTurn.Equals(null))
-                {
-                    //It should exit the loop before dequeue a null
-                    throw new UnreachableCodeException("Win condition failed, dequeue null turn");
-                }
-
-                //Save the turn
-                this.TurnResults.Add(currentTurn.Run());
-
-                currentTurn = this.turns.Dequeue();
+                this.TurnResults.Add(this.turns.Dequeue().Run());
             }
             return new WaveResult(this.InitialResult,this.TurnResults.ToArray());
         }

@@ -51,7 +51,7 @@ namespace Zarwin.Core.Entity
 
         public Boolean GameOver()
         {
-            return this.Soldiers.Sum(soldier => soldier.HealthPoints) > 0;
+            return (this.Soldiers.Sum(soldier => soldier.HealthPoints) == 0) || (this.Soldiers.Count==0);
         }
     }
 }

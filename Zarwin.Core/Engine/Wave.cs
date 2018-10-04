@@ -32,14 +32,13 @@ namespace Zarwin.Core.Engine
         }
 
 
-        public WaveResult Run()
+        public void Run()
         {
             this.TurnResults.Add(new ApproachTurn(this).Run());
             while (!this.WaveOver())
             {
                 this.TurnResults.Add(new SiegeTurn(this).Run());
             }
-            return new WaveResult(this.InitialResult,this.TurnResults.ToArray());
         }
 
         public Boolean WaveOver() => this.Zombies == 0;
@@ -58,11 +57,6 @@ namespace Zarwin.Core.Engine
             }
         }
 
-        //States 
-        private HordeState HordeState() => new HordeState(this.Zombies);
-
-        public TurnResult CurrentTurnResult()
-           => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints);
 
         public void WaitPlayer()
         {
@@ -71,5 +65,13 @@ namespace Zarwin.Core.Engine
                 Console.ReadLine();
             }
         }
+
+        //States 
+        private HordeState HordeState() => new HordeState(this.Zombies);
+
+        public TurnResult CurrentTurnResult()
+           => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints);
+
+        public WaveResult WaveResult()=> new WaveResult(this.InitialResult, this.TurnResults.ToArray());
     }
 }

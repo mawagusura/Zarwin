@@ -13,10 +13,20 @@ namespace Zarwin.Core.Engine
         {
             City city = new City(parameters.CityParameters, new List<SoldierParameters>(parameters.SoldierParameters));
             List<WaveResult> waveResults = new List<WaveResult>();
-            
+            Wave wave=null;
             for (int i = 0; i < parameters.WavesToRun; i++)
             {
-                waveResults.Add(new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, false).Run());
+                wave = new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, false);
+                if (wave.City.GameOver())
+                {
+                    waveResults.Add(wave.WaveResult());
+                    break;
+                }
+                else
+                {
+                    wave.Run();
+                    waveResults.Add(wave.WaveResult());
+                }
             }
             return new Result(waveResults.ToArray());
         }

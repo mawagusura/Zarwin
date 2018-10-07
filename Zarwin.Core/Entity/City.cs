@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
@@ -12,9 +10,7 @@ namespace Zarwin.Core.Entity
     {
         public int WallHealthPoints { get; set; } = 10;
 
-        public List<Soldier> Soldiers { get; private set; } = new List<Soldier>();
-
-        public List<Soldier> AliveSoldiers => Soldiers.Where(Alive => true).ToList();
+        public List<Soldier> Soldiers { get; } = new List<Soldier>();
 
         public List<SoldierState> SoldierState
         {

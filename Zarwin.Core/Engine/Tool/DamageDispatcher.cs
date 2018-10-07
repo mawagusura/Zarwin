@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Zarwin.Shared.Contracts.Core;
 
-namespace Zarwin.Core.Engine
+namespace Zarwin.Core.Engine.Tool
 {
+    [ExcludeFromCodeCoverage]
     class DamageDispatcher : IDamageDispatcher
     {
-        private ItemSelector Selector { get; set; }
+        private ItemSelector selector;
 
         /// <summary>
         /// Constructor of DamageDisptacher
@@ -16,7 +18,7 @@ namespace Zarwin.Core.Engine
         /// <param name="sel"></param>
         public DamageDispatcher(ItemSelector sel)
         {
-            this.Selector = sel;
+            this.selector = sel;
         }
 
         /// <summary>
@@ -34,7 +36,7 @@ namespace Zarwin.Core.Engine
                 ISoldier chosenSoldier;
                 do
                 {
-                    chosenSoldier = Selector.SelectItem(soldiers);
+                    chosenSoldier = selector.SelectItem(soldiers);
 
                 } while (chosenSoldier.HealthPoints==0);
                 int damageDealt = Math.Min(damage, chosenSoldier.HealthPoints);

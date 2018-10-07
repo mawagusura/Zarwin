@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Zarwin.Core.Engine;
+using Zarwin.Core.Engine.Tool;
 using Zarwin.Shared.Contracts.Input;
 
-namespace Zarwin.Core.Engine
+namespace Zarwin.Core.Application
 {
     class Program
     {
-
+        [ExcludeFromCodeCoverage]
         public static int Main()
         {
-            Printer.PrintMessage("Start");
+            UserInterface.PrintMessage("Start",true);
 
             Simulator sim = new Simulator(true);
             List<SoldierParameters> soldiers=new List<SoldierParameters>();
@@ -29,7 +32,7 @@ namespace Zarwin.Core.Engine
                 
                 ), soldiers.ToArray()));
 
-            Printer.PrintMessage("End");
+            UserInterface.PrintMessage("End",true);
             return 0;
         }
     }

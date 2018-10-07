@@ -45,11 +45,11 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(5, soldier.HealthPoints);
         }
 
+        
         [Fact]
         public void InitWithWrongParameters()
         {
-            soldier = new Soldier(new Shared.Contracts.Input.SoldierParameters(2, 2));
-            Assert.Throws<WrongParameterException>(() => soldier = new Soldier(new SoldierParameters(-1, -1)));
+            Assert.Throws<WrongParameterException>(() => new Soldier(new SoldierParameters(-1, -1)));
         }
 
         ///

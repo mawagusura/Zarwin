@@ -1,8 +1,7 @@
-﻿using System;
-using Zarwin.Core.Entity;
+﻿using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Engine
+namespace Zarwin.Core.Engine.Turn
 {
     class SiegeTurn : Turn
     {
@@ -33,7 +32,7 @@ namespace Zarwin.Core.Engine
             {
                 if (soldier.HealthPoints > 0)
                 {
-                    Printer.PrintMessage("Solider n°" + soldier.Id + " attacks");
+                    this.wave.PrintMessage("Solider n°" + soldier.Id + " attacks");
                     this.wave.KillZombies(soldier);
 
                     this.wave.WaitPlayer();
@@ -49,12 +48,12 @@ namespace Zarwin.Core.Engine
             if (this.wave.City.WallHealthPoints > 0)
             {
                 this.wave.City.HurtWall(this.wave.Zombies);
-                Printer.PrintMessage("Zombies attack wall");
+                this.wave.PrintMessage("Zombies attack wall");
             }
             else
             {
                 this.wave.Dispatcher.DispatchDamage(this.wave.Zombies, this.wave.City.Soldiers);
-                Printer.PrintMessage("Zombies attack soldiers");
+                this.wave.PrintMessage("Zombies attack soldiers");
             }
 
             this.wave.WaitPlayer();

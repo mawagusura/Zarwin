@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Zarwin.Core.Entity;
-using Zarwin.Shared.Contracts.Output;
+﻿using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Engine
+namespace Zarwin.Core.Engine.Turn
 {
     public abstract class Turn 
     {

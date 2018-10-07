@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Zarwin.Core.Engine.Tool;
+using Zarwin.Core.Engine.Turn;
 using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
@@ -12,7 +13,7 @@ namespace Zarwin.Core.Engine
     {
         public int Zombies { get; set; }
         public City City { get; }
-        private readonly Boolean waiting;
+        private Boolean Player { get; }
 
 
         public IDamageDispatcher Dispatcher { get; }
@@ -30,7 +31,7 @@ namespace Zarwin.Core.Engine
         {
             this.Zombies = hordeParameter.Size;
             this.City = city;
-            this.waiting = waiting;
+            this.Player = waiting;
             this.Dispatcher = dispatcher;
 
             this.InitialResult = this.CurrentTurnResult();
@@ -82,10 +83,12 @@ namespace Zarwin.Core.Engine
         /// </summary>
         public void WaitPlayer()
         {
-            if (this.waiting)
-            {
-                Console.ReadLine();
-            }
+            UserInterface.ReadMessage(this.Player);
+        }
+
+        public void PrintMessage(String message)
+        {
+            UserInterface.PrintMessage(message, this.Player);
         }
 
         //States 

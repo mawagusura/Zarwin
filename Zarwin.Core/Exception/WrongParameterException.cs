@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Zarwin.Core.Exceptions
 {
+
+    [ExcludeFromCodeCoverage]
     public class WrongParameterException 
         : Exception
     {

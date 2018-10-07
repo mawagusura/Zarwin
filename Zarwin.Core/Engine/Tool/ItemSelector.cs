@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Zarwin.Core.Engine
+namespace Zarwin.Core.Engine.Tool
 {
     class ItemSelector
     {
@@ -12,6 +13,7 @@ namespace Zarwin.Core.Engine
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public T SelectItem<T>(IEnumerable<T> list)
         {
             Random rnd = new Random();

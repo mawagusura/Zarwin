@@ -50,5 +50,22 @@ namespace Zarwin.Core.Tests.IntegrationTests
             Assert.Equal(0, actualOutput.Waves[0].Turns[1].Horde.Size);
 
         }
+
+        [Fact]
+        public void HordeStompSoldier()
+        {
+            Parameters input = new Parameters(
+                2,
+                new FirstSoldierDamageDispatcher(),
+                new HordeParameters(10),
+                new CityParameters(0),
+                new SoldierParameters(1, 1));
+
+            Result actualOutput = CreateSimulator().Run(input);
+            Assert.Equal(0, actualOutput.Waves[0].Turns[1].Soldiers[0].HealthPoints);
+
+        }
+
+
     }
 }

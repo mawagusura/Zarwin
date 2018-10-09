@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Zarwin.Core.Engine.Tool
 {
-    [ExcludeFromCodeCoverage]
-    class UserInterface
+    
+    public class UserInterface
     {
         /// <summary>
         /// Print a message into the console

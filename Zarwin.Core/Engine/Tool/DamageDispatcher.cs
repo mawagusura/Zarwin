@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Zarwin.Shared.Contracts.Core;
 
 namespace Zarwin.Core.Engine.Tool
 {
-    [ExcludeFromCodeCoverage]
-    class DamageDispatcher : IDamageDispatcher
+    public class DamageDispatcher : IDamageDispatcher
     {
         private ItemSelector selector;
 
@@ -28,7 +26,7 @@ namespace Zarwin.Core.Engine.Tool
         /// </summary>
         /// <param name="damage"></param>
         /// <param name="soldiers"></param>
-        void IDamageDispatcher.DispatchDamage(int damage, IEnumerable<ISoldier> soldiers)
+        public void DispatchDamage(int damage, IEnumerable<ISoldier> soldiers)
         {
             //Dispatch damage while there is damage to splite and there is still soldier alive
             while (damage > 0 && soldiers.Sum(soldier => soldier.HealthPoints) > 0)

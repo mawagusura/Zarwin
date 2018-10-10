@@ -40,6 +40,10 @@ namespace Zarwin.Core.Entity
             soldierParameters.ForEach(sp => Soldiers.Add(new Soldier(sp)));
         }
 
+        /// <summary>
+        /// Hit the wall with damage given in param
+        /// </summary>
+        /// <param name="amount"></param>
         public void HurtWall(int amount)
         {
             WallHealthPoints= amount > WallHealthPoints ?  0 : WallHealthPoints - amount;

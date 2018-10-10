@@ -86,6 +86,10 @@ namespace Zarwin.Core.Engine
             UserInterface.ReadMessage(this.Player);
         }
 
+        /// <summary>
+        /// Print a message to the user
+        /// </summary>
+        /// <param name="message"></param>
         public void PrintMessage(String message)
         {
             UserInterface.PrintMessage(message, this.Player);

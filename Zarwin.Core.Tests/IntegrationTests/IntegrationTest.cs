@@ -36,6 +36,9 @@ namespace Zarwin.Core.Tests.IntegrationTests
             Assert.Equal(0, actualOutput.Waves[0].Turns[1].WallHealthPoints);
         }
 
+        /// <summary>
+        /// One Soldier with 20 attacks and a Horde of 10 Zombies
+        /// </summary>
         [Fact]
         public void SoldierStompHorde()
         {
@@ -51,6 +54,10 @@ namespace Zarwin.Core.Tests.IntegrationTests
 
         }
 
+
+        /// <summary>
+        /// 10 Zombies and 1 Soldier lvl 1
+        /// </summary>
         [Fact]
         public void HordeStompSoldier()
         {

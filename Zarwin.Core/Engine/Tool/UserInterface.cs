@@ -5,7 +5,7 @@ namespace Zarwin.Core.Engine.Tool
     public class UserInterface
     {
         /// <summary>
-        /// Print a message into the console
+        /// Print a line into the console
         /// </summary>
         /// <param name="message"></param>
         public static void PrintMessage(String message, bool userPlay) 
@@ -17,7 +17,7 @@ namespace Zarwin.Core.Engine.Tool
         }
 
         /// <summary>
-        /// Read a message from the console
+        /// Read a line from the console
         /// </summary>
         /// <returns></returns>
         public static String ReadMessage(bool userPlay)

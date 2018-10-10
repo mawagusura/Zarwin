@@ -14,6 +14,9 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Constructor tests
         ///
 
+        ///<summary>
+        /// Test on creation of a city without parameter
+        ///</summary>
         [Fact]
         public void InitCity()
         {
@@ -22,6 +25,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(10, city.WallHealthPoints);
         }
 
+        /// <summary>
+        /// Test on creation of a city with parameter
+        /// </summary>
         [Fact]
         public void InitCityWithParameters()
         {
@@ -35,6 +41,9 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Tests on HurtWall() method
         ///
 
+        /// <summary>
+        /// Test on damaging the wall and destroy it
+        /// </summary>
         [Fact]
         public void HurtWallMoreThanHealth()
         {
@@ -43,6 +52,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(0, city.WallHealthPoints);
         }
 
+        /// <summary>
+        /// Test on damaging the wall with one damage
+        /// </summary>
         [Fact]
         public void HurtWallOneDamage()
         {
@@ -52,6 +64,10 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(health - 1, city.WallHealthPoints);
         }
 
+
+        /// <summary>
+        /// Test on damaging the wall with multiple damage
+        /// </summary>
         [Fact]
         public void HurtWallMultipleDamage()
         {

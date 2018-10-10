@@ -11,6 +11,9 @@ namespace Zarwin.Core.Tests.UnitTests
 {
     public class ToolUnitTest
     {
+        /// <summary>
+        /// Test a selector can select an item from a list given
+        /// </summary>
         [Fact]
         public void TestItemSelector()
         {
@@ -25,6 +28,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Contains(selector.SelectItem(list), list);
         }
 
+        /// <summary>
+        /// Test on a damage dispatcher and it capability to dispatch all damages given
+        /// </summary>
         [Fact]
         public void TestDamageDispatcherDispatchAllDamage()
         {
@@ -40,6 +46,10 @@ namespace Zarwin.Core.Tests.UnitTests
             dispatcher.DispatchDamage(damageToDeal, soldiers);
             Assert.True(soldiers.Sum(soldier => soldier.HealthPoints) == (sumHPInit - damageToDeal) );
         }
+
+        /// <summary>
+        /// Test on a damage dispatcher to dispatch the max damage possible
+        /// </summary>
         [Fact]
         public void TestDamageDispatcherOverkill()
         {
@@ -53,18 +63,20 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.True(s.HealthPoints == 0);
         }
 
+        /// <summary>
+        /// Test on the UserInterface and it capacity to read a message
+        /// </summary>
         [Fact]
         public void TestInput()
         {
-            
-
             var input = new StringReader("Test");
             Console.SetIn(input);
-
-
             Assert.Equal("Test", UserInterface.ReadMessage(true));
         }
 
+        /// <summary>
+        ///  Test on the UserInterface and the capacity to print a message
+        /// </summary>
         [Fact]
         public void TestOutput()
         {

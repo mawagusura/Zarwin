@@ -14,6 +14,9 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Basic Constructor Tests
         ///
 
+        ///<summary>
+        /// Test on creation of a solider
+        /// </summary>
         [Fact]
         public void InitSoldier()
         {
@@ -23,6 +26,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(1, soldier.AttackPoints);
         }
 
+        /// <summary>
+        /// Test on creation of two soldiers
+        /// </summary>
         [Fact]
         public void InitTwoSoldiers()
         {
@@ -36,6 +42,9 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Basic Constructor Tests
         ///
 
+        ///<summary>
+        /// Test on creation of a soldier with parameter
+        /// </summary>
         [Fact]
         public void InitWithParameters()
         {
@@ -45,7 +54,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(5, soldier.HealthPoints);
         }
 
-        
+        /// <summary>
+        /// Test on creation of soldier with wrong parameter
+        /// </summary>
         [Fact]
         public void InitWithWrongParameters()
         {
@@ -56,6 +67,9 @@ namespace Zarwin.Core.Tests.UnitTests
         ///Tests on Hurt() method
         ///
 
+        ///<summary>
+        /// Test on damaging a soldier and kill him
+        /// </summary>
         [Fact]
         public void HurtMoreThanHealth()
         {
@@ -64,6 +78,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(0, soldier.HealthPoints);
         }
 
+        /// <summary>
+        /// Test on damaging a soldier with 1 damage
+        /// </summary>
         [Fact]
         public void HurtOneDamage()
         {
@@ -73,6 +90,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(health - 1, soldier.HealthPoints);
         }
 
+        /// <summary>
+        /// Test on damaging a soldier with multiple damage
+        /// </summary>
         [Fact]
         public void HurtMultipleDamage()
         {
@@ -87,6 +107,9 @@ namespace Zarwin.Core.Tests.UnitTests
         ///Tests on levelUp() method
         ///
 
+        ///<summary>
+        /// Test on a level up of a soldier
+        /// </summary>
         [Fact]
         public void LevelUpBasic()
         {
@@ -99,6 +122,9 @@ namespace Zarwin.Core.Tests.UnitTests
             Assert.Equal(level + 1, soldier.Level);
         }
 
+        /// <summary>
+        /// Test on a level up of soldier and his health
+        /// </summary>
         [Fact]
         public void LevelUpWithMaxHealthPoints()
         {
@@ -111,6 +137,10 @@ namespace Zarwin.Core.Tests.UnitTests
         /// Tests on Attack Points
         ///
         
+
+        ///<summary>
+        /// Test with multiple input on the attack of a soldier based on his level
+        /// </summary>
         [Theory]
         [InlineData(1)]
         [InlineData(10)]

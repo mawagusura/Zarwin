@@ -83,7 +83,7 @@ namespace Zarwin.Core.Tests.UnitTests
             var output = new StringWriter();
             Console.SetOut(output);
             UserInterface.PrintMessage("Test", true);
-            Assert.Equal("Test\r\n", output.ToString());
+            Assert.Equal("Test"+ Environment.NewLine, output.ToString());
         }
     }
 }

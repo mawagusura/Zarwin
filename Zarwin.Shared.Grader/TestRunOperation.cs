@@ -32,6 +32,7 @@ namespace Zarwin.Shared.Grader
         private void ExecuteProcess()
         {
             var process = new TestProcess(_solutionDirectory, _noBuild, "--logger trx", _parameter.IncludeFilterArg);
+            process.ForwardDataAndError = true;
             process.OutputDataReceived += Process_OutputDataReceived;
             process.Run();
         }

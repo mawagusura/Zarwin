@@ -2,7 +2,4 @@
 obj
 bin
 TestResults
-
-*.svg
-
-grade\.json
+/*.svg

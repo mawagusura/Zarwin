@@ -8,7 +8,7 @@ namespace Zarwin.Shared.Grader
 {
     public class TestRunOperation
     {
-        private static readonly Regex _resultLine = new Regex("^Results File: (?<fileName>.*)$");
+        private static readonly Regex _resultLine = new Regex("Results File: (?<fileName>.*\\.trx)$");
 
         private readonly string _solutionDirectory;
         private readonly bool _noBuild;

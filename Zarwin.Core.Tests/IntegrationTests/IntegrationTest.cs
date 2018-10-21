@@ -25,11 +25,12 @@ namespace Zarwin.Core.Tests.IntegrationTests
         [Fact]
         public void WallTakeDamage()
         {
-           Parameters input = new Parameters(
-                1,
-                new FirstSoldierDamageDispatcher(),
-                new HordeParameters(3),
-                new CityParameters(2),
+            Parameters input = new Parameters(
+                 1,
+                 new FirstSoldierDamageDispatcher(),
+                 new HordeParameters(3),
+                 new CityParameters(2),
+                 new Order[1],
                 new SoldierParameters(1, 1));
             Result actualOutput = CreateSimulator().Run(input);
 
@@ -47,6 +48,7 @@ namespace Zarwin.Core.Tests.IntegrationTests
                 new FirstSoldierDamageDispatcher(),
                 new HordeParameters(10),
                 new CityParameters(0),
+                new Order[1],
                 new SoldierParameters(1, 200));
 
             Result actualOutput = CreateSimulator().Run(input);
@@ -66,6 +68,7 @@ namespace Zarwin.Core.Tests.IntegrationTests
                 new FirstSoldierDamageDispatcher(),
                 new HordeParameters(10),
                 new CityParameters(0),
+                new Order[1],
                 new SoldierParameters(1, 1));
 
             Result actualOutput = CreateSimulator().Run(input);

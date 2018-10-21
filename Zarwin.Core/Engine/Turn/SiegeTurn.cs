@@ -13,12 +13,12 @@ namespace Zarwin.Core.Engine.Turn
         /// <returns></returns>
         public override TurnResult Run()
         {
-            this.SoldierPhase();
-            if (this.wave.WaveOver())
+            this.ZombiePhase();
+            if (this.wave.IsOver())
             {
                 return this.wave.CurrentTurnResult();
             }
-            this.ZombiePhase();
+            this.SoldierPhase();
 
             return this.wave.CurrentTurnResult();
         }
@@ -47,12 +47,12 @@ namespace Zarwin.Core.Engine.Turn
         {
             if (this.wave.City.WallHealthPoints > 0)
             {
-                this.wave.City.HurtWall(this.wave.Zombies);
+                this.wave.City.HurtWall(this.wave.Zombies.Count);
                 this.wave.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.Dispatcher.DispatchDamage(this.wave.Zombies, this.wave.City.Soldiers);
+                this.wave.Dispatcher.DispatchDamage(this.wave.Zombies.Count, this.wave.City.Soldiers);
                 this.wave.PrintMessage("Zombies attack soldiers");
             }
 

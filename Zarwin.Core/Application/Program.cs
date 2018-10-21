@@ -20,6 +20,7 @@ namespace Zarwin.Core.Application
                 soldiers.Add(new SoldierParameters(i, 1));
             }
 
+
             /*
              * Run a simulation with:
              * 5 waves
@@ -27,10 +28,7 @@ namespace Zarwin.Core.Application
              * 3 HP in the city
              * 2 soldiers at level 1
              */
-            sim.Run(new Parameters(5,new DamageDispatcher(new ItemSelector()),new HordeParameters(5),new CityParameters(3
-                
-                
-                ), soldiers.ToArray()));
+            sim.Run(new Parameters(5,new DamageDispatcher(new ItemSelector()),new HordeParameters(5),new CityParameters(3),new Order[1], soldiers.ToArray()));
 
             UserInterface.PrintMessage("End",true);
             return 0;

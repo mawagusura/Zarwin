@@ -11,7 +11,7 @@ namespace Zarwin.Core.Engine
 {
     public class Wave
     {
-        public int Zombies { get; set; }
+        public List<Zombie> Zombies { get; set; } = new List<Zombie>();
         public City City { get; }
         private Boolean Player { get; }
 
@@ -23,13 +23,19 @@ namespace Zarwin.Core.Engine
         /// <summary>
         /// Create a wave 
         /// </summary>
-        /// <param name="hordeParameter"></param>
+        /// <param name="waveParameter"></param>
         /// <param name="city"></param>
         /// <param name="dispatcher"></param>
         /// <param name="waiting"></param>
-        public Wave(HordeParameters hordeParameter, City city, IDamageDispatcher dispatcher, Boolean waiting)
+        public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, Boolean waiting)
         {
-            this.Zombies = hordeParameter.Size;
+            foreach(ZombieParameter z in waveParameter.ZombieTypes)
+            {
+                for (int i=0; i < z.Count; i++)
+                {
+                    Zombies.Add(new Zombie(z));
+                }
+            }
             this.City = city;
             this.Player = waiting;
             this.Dispatcher = dispatcher;
@@ -45,7 +51,7 @@ namespace Zarwin.Core.Engine
         public void Run()
         {
             this.TurnResults.Add(new ApproachTurn(this).Run());
-            while (!this.WaveOver() && !this.City.GameOver())
+            while (!this.IsOver() && !this.City.GameOver())
             {
                 this.TurnResults.Add(new SiegeTurn(this).Run());
             }
@@ -54,7 +60,7 @@ namespace Zarwin.Core.Engine
         /// <summary>
         /// A wave is over when all zombies died
         /// </summary>
-        public Boolean WaveOver() => this.Zombies == 0;
+        public Boolean IsOver() => this.Zombies.Count == 0;
 
         /// <summary>
         /// A soldier kill zombies based on it attack and the number of zombies still "alive"
@@ -64,16 +70,16 @@ namespace Zarwin.Core.Engine
         public void KillZombies(Soldier soldier)
         {
             //The soldier can kill all zombies "alive"
-            if (this.Zombies < soldier.AttackPoints)
+            if (this.Zombies.Count < soldier.AttackPoints)
             {
-                soldier.LevelUp(this.Zombies);
-                this.Zombies = 0;
+                soldier.LevelUp(this.Zombies.Count);
+                Zombies = new List<Zombie>();
             }
             
             //Soldier kills all zombies he can 
             else
             {
-                this.Zombies -= soldier.AttackPoints;
+                this.Zombies.RemoveRange(0, soldier.AttackPoints);
                 soldier.LevelUp(soldier.AttackPoints);
             }
         }
@@ -101,14 +107,14 @@ namespace Zarwin.Core.Engine
         /// Create an HordeState of the current situation
         /// </summary>
         /// <returns></returns>
-        private HordeState HordeState() => new HordeState(this.Zombies);
+        private HordeState HordeState() => new HordeState(this.Zombies.Count);
 
         /// <summary>
         /// Create a TurnResult of the current situation
         /// </summary>
         /// <returns></returns>
         public TurnResult CurrentTurnResult()
-           => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints);
+           => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints, this.City.Money);
 
         /// <summary>
         /// Create a WaveResult of the current situation

@@ -32,7 +32,7 @@ namespace Zarwin.Core.Engine
             for (int i = 0; i < parameters.WavesToRun; i++)
             {
                 UserInterface.PrintMessage("Wave n° " + i,Player);
-                wave = new Wave(parameters.HordeParameters, city, parameters.DamageDispatcher, this.Player);
+                wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher, this.Player);
 
                 //Exist the game when the game is over
                 if (wave.City.GameOver())

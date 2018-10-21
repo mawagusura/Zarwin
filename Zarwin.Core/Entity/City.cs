@@ -12,6 +12,8 @@ namespace Zarwin.Core.Entity
 
         public List<Soldier> Soldiers { get; } = new List<Soldier>();
 
+        public int Money { get; } = 0;
+
         public List<SoldierState> SoldierState
         {
             get

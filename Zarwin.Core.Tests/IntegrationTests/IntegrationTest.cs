@@ -30,7 +30,7 @@ namespace Zarwin.Core.Tests.IntegrationTests
                  new FirstSoldierDamageDispatcher(),
                  new HordeParameters(3),
                  new CityParameters(2),
-                 new Order[1],
+                 new Order[0],
                 new SoldierParameters(1, 1));
             Result actualOutput = CreateSimulator().Run(input);
 
@@ -48,7 +48,7 @@ namespace Zarwin.Core.Tests.IntegrationTests
                 new FirstSoldierDamageDispatcher(),
                 new HordeParameters(10),
                 new CityParameters(0),
-                new Order[1],
+                new Order[0],
                 new SoldierParameters(1, 200));
 
             Result actualOutput = CreateSimulator().Run(input);
@@ -68,11 +68,11 @@ namespace Zarwin.Core.Tests.IntegrationTests
                 new FirstSoldierDamageDispatcher(),
                 new HordeParameters(10),
                 new CityParameters(0),
-                new Order[1],
+                new Order[0],
                 new SoldierParameters(1, 1));
 
             Result actualOutput = CreateSimulator().Run(input);
-            Assert.Equal(0, actualOutput.Waves[0].Turns[1].Soldiers[0].HealthPoints);
+            Assert.Empty(actualOutput.Waves[0].Turns[1].Soldiers);
 
         }
 

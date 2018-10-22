@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Zarwin.Core.Engine.Tool;
 using Zarwin.Core.Engine.Turn;
 using Zarwin.Core.Entity;
@@ -11,7 +12,7 @@ namespace Zarwin.Core.Engine
 {
     public class Wave
     {
-        public List<Zombie> Zombies { get; set; } = new List<Zombie>();
+        public List<Zombie> Zombies { get;} = new List<Zombie>();
         public City City { get; }
         private Boolean Player { get; }
 
@@ -20,6 +21,8 @@ namespace Zarwin.Core.Engine
         private TurnResult InitialResult { get; set; }
         private List<TurnResult> TurnResults { get; }
 
+        public List<Order> Orders { get; } = new List<Order>();
+
         /// <summary>
         /// Create a wave 
         /// </summary>
@@ -27,7 +30,7 @@ namespace Zarwin.Core.Engine
         /// <param name="city"></param>
         /// <param name="dispatcher"></param>
         /// <param name="waiting"></param>
-        public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, Boolean waiting)
+        public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, Boolean waiting, List<Order> orders)
         {
             foreach(ZombieParameter z in waveParameter.ZombieTypes)
             {
@@ -39,11 +42,17 @@ namespace Zarwin.Core.Engine
             this.City = city;
             this.Player = waiting;
             this.Dispatcher = dispatcher;
-
+            this.Orders.AddRange(orders);
+            
             this.InitialResult = this.CurrentTurnResult();
 
             this.TurnResults = new List<TurnResult>();
+
+            ExecuteOrder();
+            this.City.ExecuteActions();
         }
+
+
 
         /// <summary>
         /// Run a wave, start with the ApproachTurn and run SiegeTurn while there is still zombies or soldier
@@ -53,6 +62,7 @@ namespace Zarwin.Core.Engine
             this.TurnResults.Add(new ApproachTurn(this).Run());
             while (!this.IsOver() && !this.City.GameOver())
             {
+                ExecuteOrder();
                 this.TurnResults.Add(new SiegeTurn(this).Run());
             }
         }
@@ -73,13 +83,15 @@ namespace Zarwin.Core.Engine
             if (this.Zombies.Count < soldier.AttackPoints)
             {
                 soldier.LevelUp(this.Zombies.Count);
-                Zombies = new List<Zombie>();
+                this.City.IncreaseMoney(this.Zombies.Count);
+                Zombies.Clear();
             }
             
             //Soldier kills all zombies he can 
             else
             {
                 this.Zombies.RemoveRange(0, soldier.AttackPoints);
+                this.City.IncreaseMoney(soldier.AttackPoints);
                 soldier.LevelUp(soldier.AttackPoints);
             }
         }
@@ -121,5 +133,13 @@ namespace Zarwin.Core.Engine
         /// </summary>
         /// <returns></returns>
         public WaveResult WaveResult()=> new WaveResult(this.InitialResult, this.TurnResults.ToArray());
+
+        private void ExecuteOrder()
+        {
+            foreach(Order o in this.Orders.Where(order => order.TurnIndex == this.TurnResults.Count))
+            {
+                this.City.ExecuteOrder(o.Type,o.TargetSoldier);
+            }
+        }
     }
 }

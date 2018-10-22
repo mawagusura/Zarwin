@@ -14,10 +14,6 @@ namespace Zarwin.Core.Engine.Turn
         public override TurnResult Run()
         {
             this.ZombiePhase();
-            if (this.wave.IsOver())
-            {
-                return this.wave.CurrentTurnResult();
-            }
             this.SoldierPhase();
 
             return this.wave.CurrentTurnResult();

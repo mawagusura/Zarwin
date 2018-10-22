@@ -108,19 +108,6 @@ namespace Zarwin.Core.Entity
             }
         }
 
-
-        /*
-         * NO ORDER ON WALL
-        private void BuyUpgradeWall()
-        {
-            this.Actions.Enqueue(UpgradeWall);
-        }
-
-        private void UpgradeWall()
-        {
-            this.WallHealthPoints += 10;
-        }
-        */
         private void BuyShotgun(int? targetSoldier)
         {
             if (targetSoldier.HasValue)

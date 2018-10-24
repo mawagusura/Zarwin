@@ -1,5 +1,8 @@
-﻿using Zarwin.Core.Entity.Weapon;
+﻿using System;
+using Zarwin.Core.Entity.Weapon;
 using Zarwin.Core.Exceptions;
+using Zarwin.Shared.Contracts.Core;
+using Zarwin.Shared.Contracts.Input;
 
 namespace Zarwin.Core.Entity
 {
@@ -67,5 +70,16 @@ namespace Zarwin.Core.Entity
             if(HealthPoints < MaxHealthPoints) HealthPoints++;
         }
 
+        /// <summary>
+        /// Raise the level n times
+        /// </summary>
+        /// <param name="levelToUp"></param>
+        public void LevelUp(int levelToUp)
+        {
+            for(int i = 0; i < levelToUp; i++)
+            {
+                this.LevelUp();
+            }
+        }
     }
 }

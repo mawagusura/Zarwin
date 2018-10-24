@@ -1,4 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Zarwin.Shared.Contracts.Input;
+
 namespace Zarwin.Core.Entity
 {
     public class Zombie : IComparable<Zombie>
@@ -19,11 +23,6 @@ namespace Zarwin.Core.Entity
             Type = zombieParameter.Type;
         }
 
-        /// <summary>
-        /// Hurt the zombie
-        /// </summary>
-        /// <param name="dmg"></param>
-        /// <param name="turn"></param>
         public void Hurt(int dmg, int turn)
         {
             // on tape si c'est du normal ou si on a déjà tapé ce tour
@@ -35,11 +34,7 @@ namespace Zarwin.Core.Entity
             else if (Trait == ZombieTrait.Tough) LastTurn = turn;
         }
 
-        /// <summary>
-        /// Compate two zombie
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+
         public int CompareTo(Zombie other)
         {
             if (other.Type != Type) return Type-other.Type;

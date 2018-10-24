@@ -1,6 +1,12 @@
-﻿using Zarwin.Core.Engine.Tool;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Zarwin.Core.Engine.Tool;
 using Zarwin.Core.Engine.Turn;
 using Zarwin.Core.Entity;
+using Zarwin.Shared.Contracts.Core;
+using Zarwin.Shared.Contracts.Input;
+using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine
 {
@@ -36,7 +42,7 @@ namespace Zarwin.Core.Engine
                 }
             }
 
-            // Sort zombies
+            // tri liste zombies
             Zombies.Sort();
 
             this.City = city;
@@ -138,9 +144,6 @@ namespace Zarwin.Core.Engine
         /// <returns></returns>
         public WaveResult WaveResult()=> new WaveResult(this.InitialResult, this.TurnResults.ToArray());
 
-        /// <summary>
-        /// Execute all order for the current order
-        /// </summary>
         private void ExecuteOrder()
         {
             foreach(Order o in this.Orders.Where(order => order.TurnIndex == this.TurnResults.Count))

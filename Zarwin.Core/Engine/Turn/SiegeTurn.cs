@@ -24,7 +24,7 @@ namespace Zarwin.Core.Engine.Turn
         /// </summary>
         private void SoldierPhase()
         {
-            foreach (Soldier soldier in this.wave.City.Soldiers)
+            foreach (Soldier soldier in this.wave.City.SoldiersAlive)
             {
                 if (soldier.HealthPoints > 0)
                 {
@@ -48,7 +48,7 @@ namespace Zarwin.Core.Engine.Turn
             }
             else
             {
-                this.wave.Dispatcher.DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.City.Soldiers);
+                this.wave.Dispatcher.DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.City.SoldiersAlive);
                 this.wave.PrintMessage("Zombies attack soldiers");
             }
 

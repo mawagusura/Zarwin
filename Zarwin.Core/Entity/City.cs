@@ -24,13 +24,14 @@ namespace Zarwin.Core.Entity
             get
             {
                 List<SoldierState> states = new List<SoldierState>();
-                Soldiers.Where(sold => sold.HealthPoints>0).ToList()
-                        .ForEach(sold => states.Add(new SoldierState(sold.Id, sold.Level, sold.HealthPoints)));
+                SoldiersAlive.ForEach(sold => states.Add(new SoldierState(sold.Id, sold.Level, sold.HealthPoints)));
                 return states;
             }
         }
         
-        public List<Soldier> SoldierWithoutWeapon => Soldiers.Where( soldier => soldier.Weapon.GetType()== typeof(Hand)).ToList();
+        public List<Soldier> SoldiersWithoutWeapon => Soldiers.Where( soldier => soldier.Weapon.GetType()== typeof(Hand)).ToList();
+
+        public List<Soldier> SoldiersAlive => Soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
 
         public Soldier SoliderById(int id) => Soldiers.Where(soldier => soldier.Id == id).ToArray()[0];
 
@@ -151,12 +152,12 @@ namespace Zarwin.Core.Entity
 
         private void AddMachineGun()
         {
-            this.SoldierWithoutWeapon[0].Weapon = new MachineGun();
+            this.SoldiersWithoutWeapon[0].Weapon = new MachineGun();
         }
 
         private void AddShotgun()
         {
-            this.SoldierWithoutWeapon[0].Weapon = new Shotgun();
+            this.SoldiersWithoutWeapon[0].Weapon = new Shotgun();
         }
         private void AddShotgun(int id)
         {

@@ -23,6 +23,8 @@ namespace Zarwin.Core.Engine
 
         public List<Order> Orders { get; } = new List<Order>();
 
+        public List<Zombie> ZombiesAlive => Zombies.Where(z => z.HealthPoints > 0).ToList();
+
         /// <summary>
         /// Create a wave 
         /// </summary>
@@ -39,6 +41,10 @@ namespace Zarwin.Core.Engine
                     Zombies.Add(new Zombie(z));
                 }
             }
+
+            // tri liste zombies
+            Zombies.Sort();
+
             this.City = city;
             this.Player = waiting;
             this.Dispatcher = dispatcher;
@@ -70,7 +76,7 @@ namespace Zarwin.Core.Engine
         /// <summary>
         /// A wave is over when all zombies died
         /// </summary>
-        public Boolean IsOver() => this.Zombies.Count == 0;
+        public Boolean IsOver() => ZombiesAlive.Count==0;
 
         /// <summary>
         /// A soldier kill zombies based on it attack and the number of zombies still "alive"
@@ -79,21 +85,22 @@ namespace Zarwin.Core.Engine
         /// <param name="soldier"></param>
         public void KillZombies(Soldier soldier)
         {
-            //The soldier can kill all zombies "alive"
-            if (this.Zombies.Count < soldier.AttackPoints)
+            Zombies.Sort();
+            int attack = soldier.AttackPoints;
+
+            while (attack > 0 && ZombiesAlive.Count>0)
             {
-                soldier.LevelUp(this.Zombies.Count);
-                this.City.IncreaseMoney(this.Zombies.Count);
-                Zombies.Clear();
+                Zombie temp = ZombiesAlive[0];
+                int def = temp.HealthPoints;
+                temp.Hurt(attack, TurnResults.Count);
+                attack -= def;
+                if (temp.HealthPoints == 0)
+                {
+                    soldier.LevelUp();
+                    this.City.IncreaseMoney(1);
+                }
             }
-            
-            //Soldier kills all zombies he can 
-            else
-            {
-                this.Zombies.RemoveRange(0, soldier.AttackPoints);
-                this.City.IncreaseMoney(soldier.AttackPoints);
-                soldier.LevelUp(soldier.AttackPoints);
-            }
+
         }
 
         /// <summary>
@@ -119,7 +126,10 @@ namespace Zarwin.Core.Engine
         /// Create an HordeState of the current situation
         /// </summary>
         /// <returns></returns>
-        private HordeState HordeState() => new HordeState(this.Zombies.Count);
+        private HordeState HordeState()
+            => new HordeState(ZombiesAlive.Count);
+        
+        
 
         /// <summary>
         /// Create a TurnResult of the current situation

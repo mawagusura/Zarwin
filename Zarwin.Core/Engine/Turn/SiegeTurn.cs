@@ -43,12 +43,12 @@ namespace Zarwin.Core.Engine.Turn
         {
             if (this.wave.City.WallHealthPoints > 0)
             {
-                this.wave.City.HurtWall(this.wave.Zombies.Count);
+                this.wave.City.HurtWall(this.wave.ZombiesAlive.Count);
                 this.wave.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.Dispatcher.DispatchDamage(this.wave.Zombies.Count, this.wave.City.Soldiers);
+                this.wave.Dispatcher.DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.City.Soldiers);
                 this.wave.PrintMessage("Zombies attack soldiers");
             }
 

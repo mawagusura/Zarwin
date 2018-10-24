@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Zarwin.Core.Entity.Weapon;
-using Zarwin.Shared.Contracts.Input;
-using Zarwin.Shared.Contracts.Output;
+﻿using Zarwin.Core.Entity.Weapon;
 
 namespace Zarwin.Core.Entity
 {

@@ -30,7 +30,7 @@ namespace Zarwin.Core.Engine.Turn
                 if (soldier.HealthPoints > 0)
                 {
                     UserInterface.PrintMessage("Solider n°" + soldier.Id + " attacks");
-                    this.wave.KillZombies(soldier);
+                    this.wave.GetCity().IncreaseMoney(this.wave.GetHorde().KillZombies(soldier,this.wave.GetTurnNumber()));
 
                     UserInterface.ReadMessage();
                 }
@@ -44,12 +44,12 @@ namespace Zarwin.Core.Engine.Turn
         {
             if (this.wave.GetCity().GetWall().HealthPoints > 0)
             {
-                this.wave.GetCity().GetWall().Hurt(this.wave.ZombiesAlive.Count);
+                this.wave.GetCity().GetWall().Hurt(this.wave.GetHorde().ZombiesAlive.Count);
                 UserInterface.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.GetCity().GetSquad().SoldiersAlive);
+                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.GetHorde().ZombiesAlive.Count, this.wave.GetCity().GetSquad().SoldiersAlive);
                 UserInterface.PrintMessage("Zombies attack soldiers");
             }
 

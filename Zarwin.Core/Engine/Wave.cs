@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Zarwin.Core.Engine.Turn;
 using Zarwin.Core.Entity;
@@ -11,15 +10,12 @@ namespace Zarwin.Core.Engine
 {
     public class Wave
     {
-        private List<Zombie> zombies = new List<Zombie>();
         private readonly City city;
         private readonly IDamageDispatcher dispatcher;
         private readonly TurnResult initialResult;
-        private List<TurnResult> turnResults = new List<TurnResult>();
+        private readonly List<TurnResult> turnResults = new List<TurnResult>();
         private readonly List<Order> orders = new List<Order>();
-
-        public List<Zombie> ZombiesAlive => zombies.Where(z => z.HealthPoints > 0).ToList();
-
+        private readonly Horde horde;
         
         /// <param name="waveParameter"></param>
         /// <param name="city"></param>
@@ -27,15 +23,7 @@ namespace Zarwin.Core.Engine
         /// <param name="waiting"></param>
         public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, List<Order> orders)
         {
-            foreach(ZombieParameter z in waveParameter.ZombieTypes)
-            {
-                for (int i=0; i < z.Count; i++)
-                {
-                    zombies.Add(new Zombie(z));
-                }
-            }
-            // Sort zombies
-            zombies.Sort();
+            this.horde = new Horde(waveParameter.ZombieTypes);
             this.city = city;
             this.dispatcher = dispatcher;
             this.orders.AddRange(orders);
@@ -46,6 +34,11 @@ namespace Zarwin.Core.Engine
             this.city.ExecuteActions();
         }
 
+        public int GetTurnNumber()
+        {
+            return this.turnResults.Count;
+        }
+
 
 
         /// <summary>
@@ -54,51 +47,16 @@ namespace Zarwin.Core.Engine
         public void Run()
         {
             this.turnResults.Add(new ApproachTurn(this).Run());
-            while (!this.IsOver && !this.city.GetSquad().IsAlive())
+            while (!this.horde.IsAlive() && !this.city.GetSquad().IsAlive())
             {
                 ExecuteOrder();
                 this.turnResults.Add(new SiegeTurn(this).Run());
             }
         }
-
-        /// <summary>
-        /// A wave is over when all zombies died
-        /// </summary>
-        public Boolean IsOver => ZombiesAlive.Count==0;
-
-        /// <summary>
-        /// A soldier kill zombies based on it attack and the number of zombies still "alive"
-        /// The soldier levelup foreach zombie killed
-        /// </summary>
-        /// <param name="soldier"></param>
-        public void KillZombies(Soldier soldier)
-        {
-            zombies.Sort();
-            int attack = soldier.AttackPoints;
-
-            while (attack > 0 && !IsOver)
-            {
-                Zombie temp = ZombiesAlive[0];
-                int def = temp.HealthPoints;
-                temp.Hurt(attack, turnResults.Count);
-                attack -= def;
-                if (temp.HealthPoints == 0)
-                {
-                    soldier.LevelUp();
-                    this.city.IncreaseMoney(1);
-                }
-            }
-        }
-
-        //States 
-
-        /// <summary>
-        /// Create an HordeState of the current situation
-        /// </summary>
-        /// <returns></returns>
-        private HordeState HordeState()
-            => new HordeState(ZombiesAlive.Count);
         
+       
+
+        //States
         
 
         /// <summary>
@@ -106,7 +64,7 @@ namespace Zarwin.Core.Engine
         /// </summary>
         /// <returns></returns>
         public TurnResult CurrentTurnResult()
-           => new TurnResult(this.city.GetSquad().SoldierState.ToArray(), this.HordeState(), this.city.GetWall().HealthPoints, this.city.Money);
+           => new TurnResult(this.city.GetSquad().SoldierState.ToArray(), this.horde.HordeState(), this.city.GetWall().HealthPoints, this.city.Money);
 
         
         public WaveResult WaveResult()=> new WaveResult(this.initialResult, this.turnResults.ToArray());
@@ -123,6 +81,10 @@ namespace Zarwin.Core.Engine
         public City GetCity()
         {
             return this.city;
+        }
+        public Horde GetHorde()
+        {
+            return this.horde;
         }
         
         public IDamageDispatcher GetDamageDispatcher()

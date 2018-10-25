@@ -25,7 +25,7 @@ namespace Zarwin.Core.Engine.Turn
         /// </summary>
         private void SoldierPhase()
         {
-            foreach (Soldier soldier in this.wave.GetCity().SoldiersAlive)
+            foreach (Soldier soldier in this.wave.GetCity().GetSquad().SoldiersAlive)
             {
                 if (soldier.HealthPoints > 0)
                 {
@@ -42,14 +42,14 @@ namespace Zarwin.Core.Engine.Turn
         /// </summary>
         private void ZombiePhase()
         {
-            if (this.wave.GetCity().WallHealthPoints > 0)
+            if (this.wave.GetCity().GetWall().HealthPoints > 0)
             {
-                this.wave.GetCity().HurtWall(this.wave.ZombiesAlive.Count);
+                this.wave.GetCity().GetWall().Hurt(this.wave.ZombiesAlive.Count);
                 UserInterface.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.GetCity().SoldiersAlive);
+                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.GetCity().GetSquad().SoldiersAlive);
                 UserInterface.PrintMessage("Zombies attack soldiers");
             }
 

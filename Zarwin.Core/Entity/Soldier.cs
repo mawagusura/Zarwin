@@ -1,4 +1,4 @@
-﻿using Zarwin.Core.Entity.Weapon;
+﻿using Zarwin.Core.Entity.SoldierWeapon;
 using Zarwin.Core.Exceptions;
 using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
@@ -16,36 +16,41 @@ namespace Zarwin.Core.Entity
 
         public int Level { get; private set; } = 1;
 
-        public IWeapon Weapon { get; set; } = new Hand();
+        private Weapon weapon =new Hand(null);
 
         private int MaxHealthPoints => 3 + Level;
 
-        private readonly City city;
+        public Weapon GetWeapon() {
+            return this.weapon;
+        }
+
+        public void SetWeapon(Weapon weapon)
+        {
+            this.weapon = weapon;
+        }
 
         //Attack points start from 1 and up by 1 every 10 level
         //(lvl:11 = 2d, lvl:21 = 3d ...)
         public int AttackPoints
-            => (1 +(Level - 1) / 10)* this.Weapon.AttackMultiplier(city);
+            => (1 +(Level - 1) / 10)* this.weapon.AttackMultiplier();
 
-        public Soldier(City city)
+        public Soldier()
         {
             Id = NextId++;
             HealthPoints = MaxHealthPoints;
-            this.city = city;
         }
 
         /// <summary>
         /// Create a soldier based on parameter
         /// </summary>
         /// <param name="soldierParameters"></param>
-        public Soldier(SoldierParameters soldierParameters,City city)
+        public Soldier(SoldierParameters soldierParameters)
         {
             if (soldierParameters.Id < 0 || soldierParameters.Level < 1) throw new WrongParameterException("Parameters with wrong values");
 
             Id = soldierParameters.Id;
             Level = soldierParameters.Level;
             HealthPoints = MaxHealthPoints;
-            this.city = city;
             NextId++;
         }
 

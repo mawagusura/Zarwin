@@ -34,11 +34,10 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void TestDamageDispatcherDispatchAllDamage()
         {
-            City c = new City();
             DamageDispatcher dispatcher = new DamageDispatcher(new ItemSelector());
             List<ISoldier> soldiers = new List<ISoldier>();
-            Soldier s = new Soldier(c);
-            Soldier s2 = new Soldier(c);
+            Soldier s = new Soldier();
+            Soldier s2 = new Soldier();
             soldiers.Add(s);
             soldiers.Add(s2);
 
@@ -56,7 +55,7 @@ namespace Zarwin.Core.Tests.UnitTests
         {
             DamageDispatcher dispatcher = new DamageDispatcher(new ItemSelector());
             List<ISoldier> soldiers = new List<ISoldier>();
-            Soldier s = new Soldier(new City());
+            Soldier s = new Soldier();
             soldiers.Add(s);
             Assert.True(s.HealthPoints == 4);
 

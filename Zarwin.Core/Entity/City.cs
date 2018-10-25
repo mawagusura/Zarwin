@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarwin.Core.Entity.Weapon;
+using Zarwin.Core.Entity.SoldierWeapon;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
@@ -11,23 +11,13 @@ namespace Zarwin.Core.Entity
     {
         private const int PriceUpgrade = 10;
 
-        public int WallHealthPoints { get; private set; } = 10;
-
-        public List<Soldier> Soldiers { get; } = new List<Soldier>();
+        private readonly Wall wall = new Wall();
 
         public int Money { get; set;  } = 0;
 
         public Queue<Action> Actions { get; } = new Queue<Action>();
 
-        public List<SoldierState> SoldierState
-            => SoldiersAlive.Select(s => new SoldierState(s.Id, s.Level, s.HealthPoints)).ToList();
-
-        
-        public List<Soldier> SoldiersWithoutWeapon => SoldiersAlive.Where( soldier => soldier.Weapon.GetType()== typeof(Hand)).ToList();
-
-        public List<Soldier> SoldiersAlive => Soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
-
-        public Soldier SoliderById(int id) => Soldiers.Where(soldier => soldier.Id == id).ToArray()[0];
+        private readonly Squad squad;
 
         /// <summary>
         ///Empty constructor for unit tests
@@ -40,33 +30,13 @@ namespace Zarwin.Core.Entity
         /// Constructor of the City class
         /// </summary>
         /// <param name="soldierParameters"></param>
-        public City(CityParameters cityParameter ,List<SoldierParameters> soldierParameters)
+        public City(CityParameters cityParameter, Squad squad)
         {
-            WallHealthPoints = cityParameter.WallHealthPoints;
+            this.squad = squad;
+            this.wall =new Wall(cityParameter.WallHealthPoints);
             this.Money = cityParameter.InitialMoney;
-            // initilaize Soldiers with parameters
-            soldierParameters.ForEach(sp => Soldiers.Add(new Soldier(sp,this)));
         }
-
-        /// <summary>
-        /// Hit the wall with damage given in param
-        /// </summary>
-        /// <param name="amount"></param>
-        public void HurtWall(int amount)
-        {
-            WallHealthPoints= amount > WallHealthPoints ?  0 : WallHealthPoints - amount;
-        }
-
-        /// <summary>
-        /// Test is the game is over, there is no soldier or there are all dead
-        /// </summary>
-        /// <returns></returns>
-        public Boolean GameOver()
-        {
-            return (this.Soldiers.Sum(soldier => soldier.HealthPoints) == 0) || (this.Soldiers.Count==0);
-        }
-
-
+        
         public void IncreaseMoney(int money)
         {
             this.Money += money;
@@ -129,33 +99,37 @@ namespace Zarwin.Core.Entity
 
         private void BuyRecruitSoldier()
         {
-            this.Actions.Enqueue(RecruitSoldier);
+            this.Actions.Enqueue(this.squad.RecruitSoldier);
         }
 
-        
-
-        private void RecruitSoldier()
-        {
-            this.Soldiers.Add(new Soldier(this));
-        }
 
         private void AddMachineGun(int id)
         {
-            SoliderById(id).Weapon = new MachineGun();
+            this.squad.SoliderById(id).SetWeapon(new MachineGun(this.wall));
         }
 
         private void AddMachineGun()
         {
-            this.SoldiersWithoutWeapon[0].Weapon = new MachineGun();
+            this.squad.SoldiersWithoutWeapon[0].SetWeapon(new MachineGun(this.wall));
         }
 
         private void AddShotgun()
         {
-            this.SoldiersWithoutWeapon[0].Weapon = new Shotgun();
+            this.squad.SoldiersWithoutWeapon[0].SetWeapon(new Shotgun(this.wall));
         }
         private void AddShotgun(int id)
         {
-            SoliderById(id).Weapon = new Shotgun();
+            this.squad.SoliderById(id).SetWeapon(new Shotgun(this.wall));
+        }
+
+        public Wall GetWall()
+        {
+            return this.wall;
+        }
+
+        public Squad GetSquad()
+        {
+            return this.squad;
         }
     }
 }

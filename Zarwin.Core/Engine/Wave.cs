@@ -36,7 +36,6 @@ namespace Zarwin.Core.Engine
             }
             // Sort zombies
             zombies.Sort();
-
             this.city = city;
             this.dispatcher = dispatcher;
             this.orders.AddRange(orders);
@@ -55,7 +54,7 @@ namespace Zarwin.Core.Engine
         public void Run()
         {
             this.turnResults.Add(new ApproachTurn(this).Run());
-            while (!this.IsOver && !this.city.GameOver())
+            while (!this.IsOver && !this.city.GetSquad().IsAlive())
             {
                 ExecuteOrder();
                 this.turnResults.Add(new SiegeTurn(this).Run());
@@ -107,7 +106,7 @@ namespace Zarwin.Core.Engine
         /// </summary>
         /// <returns></returns>
         public TurnResult CurrentTurnResult()
-           => new TurnResult(this.city.SoldierState.ToArray(), this.HordeState(), this.city.WallHealthPoints, this.city.Money);
+           => new TurnResult(this.city.GetSquad().SoldierState.ToArray(), this.HordeState(), this.city.GetWall().HealthPoints, this.city.Money);
 
         
         public WaveResult WaveResult()=> new WaveResult(this.initialResult, this.turnResults.ToArray());
@@ -125,7 +124,7 @@ namespace Zarwin.Core.Engine
         {
             return this.city;
         }
-
+        
         public IDamageDispatcher GetDamageDispatcher()
         {
             return this.dispatcher;

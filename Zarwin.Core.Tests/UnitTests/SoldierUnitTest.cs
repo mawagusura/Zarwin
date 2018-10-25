@@ -20,7 +20,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void InitSoldier()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             Assert.Equal(1, soldier.Level);
             Assert.Equal(4, soldier.HealthPoints);
             Assert.Equal(1, soldier.AttackPoints);
@@ -32,8 +32,8 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void InitTwoSoldiers()
         {
-            soldier = new Soldier(new City());
-            var sold2 = new Soldier(new City());
+            soldier = new Soldier();
+            var sold2 = new Soldier();
 
             Assert.Equal(soldier.Id + 1, sold2.Id);
         }
@@ -48,7 +48,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void InitWithParameters()
         {
-            soldier = new Soldier(new SoldierParameters(2, 2), new City());
+            soldier = new Soldier(new SoldierParameters(2, 2));
             Assert.Equal(2, soldier.Id);
             Assert.Equal(2, soldier.Level);
             Assert.Equal(5, soldier.HealthPoints);
@@ -60,7 +60,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void InitWithWrongParameters()
         {
-            Assert.Throws<WrongParameterException>(() => new Soldier(new SoldierParameters(-1, -1), new City()));
+            Assert.Throws<WrongParameterException>(() => new Soldier(new SoldierParameters(-1, -1)));
         }
 
         ///
@@ -73,7 +73,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtMoreThanHealth()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             soldier.Hurt(soldier.HealthPoints + 1);
             Assert.Equal(0, soldier.HealthPoints);
         }
@@ -84,7 +84,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtOneDamage()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             int health = soldier.HealthPoints;
             soldier.Hurt(1);
             Assert.Equal(health - 1, soldier.HealthPoints);
@@ -96,7 +96,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtMultipleDamage()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             int health = soldier.HealthPoints;
             soldier.Hurt(health - 1);
             Assert.Equal(1, soldier.HealthPoints);
@@ -113,7 +113,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void LevelUpBasic()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             int level = soldier.Level;
             soldier.Hurt(soldier.HealthPoints / 2);
             int health = soldier.HealthPoints;
@@ -128,7 +128,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void LevelUpWithMaxHealthPoints()
         {
-            soldier = new Soldier(new City());
+            soldier = new Soldier();
             soldier.LevelUp();
             Assert.Equal(soldier.Level + 3, soldier.HealthPoints);
         }
@@ -148,7 +148,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [InlineData(21)]
         public void VerifyAttackPoints(int level)
         {
-            soldier = new Soldier(new SoldierParameters(0,level), new City());
+            soldier = new Soldier(new SoldierParameters(0,level));
             Assert.Equal((int)(1 + Math.Floor((decimal)(soldier.Level-1) / 10)), soldier.AttackPoints);
         }
     }

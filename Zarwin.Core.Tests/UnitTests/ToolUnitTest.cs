@@ -72,7 +72,8 @@ namespace Zarwin.Core.Tests.UnitTests
         {
             var input = new StringReader("Test");
             Console.SetIn(input);
-            Assert.Equal("Test", UserInterface.ReadMessage(true));
+            UserInterface.SetUserPlaying(true);
+            Assert.Equal("Test", UserInterface.ReadMessage());
         }
 
         /// <summary>
@@ -83,7 +84,8 @@ namespace Zarwin.Core.Tests.UnitTests
         {
             var output = new StringWriter();
             Console.SetOut(output);
-            UserInterface.PrintMessage("Test", true);
+            UserInterface.SetUserPlaying(true);
+            UserInterface.PrintMessage("Test");
             Assert.Equal("Test"+ Environment.NewLine, output.ToString());
         }
     }

@@ -1,4 +1,5 @@
-﻿using Zarwin.Shared.Contracts.Output;
+﻿using Zarwin.Core.Engine.Tool;
+using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine.Turn
 {
@@ -12,8 +13,8 @@ namespace Zarwin.Core.Engine.Turn
         /// <returns></returns>
         public override TurnResult Run()
         {
-            this.wave.PrintMessage("Horde in approach");
-            this.wave.WaitPlayer();
+            UserInterface.PrintMessage("Horde in approach");
+            UserInterface.ReadMessage();
             return this.wave.CurrentTurnResult();
         }
     }

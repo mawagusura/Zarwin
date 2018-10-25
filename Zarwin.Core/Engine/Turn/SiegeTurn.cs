@@ -1,9 +1,10 @@
-﻿using Zarwin.Core.Entity;
+﻿using Zarwin.Core.Engine.Tool;
+using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine.Turn
 {
-    class SiegeTurn : Turn
+    public class SiegeTurn : Turn
     {
         public SiegeTurn(Wave wave) : base(wave){}
 
@@ -24,14 +25,14 @@ namespace Zarwin.Core.Engine.Turn
         /// </summary>
         private void SoldierPhase()
         {
-            foreach (Soldier soldier in this.wave.City.SoldiersAlive)
+            foreach (Soldier soldier in this.wave.GetCity().SoldiersAlive)
             {
                 if (soldier.HealthPoints > 0)
                 {
-                    this.wave.PrintMessage("Solider n°" + soldier.Id + " attacks");
+                    UserInterface.PrintMessage("Solider n°" + soldier.Id + " attacks");
                     this.wave.KillZombies(soldier);
 
-                    this.wave.WaitPlayer();
+                    UserInterface.ReadMessage();
                 }
             }
         }
@@ -41,18 +42,18 @@ namespace Zarwin.Core.Engine.Turn
         /// </summary>
         private void ZombiePhase()
         {
-            if (this.wave.City.WallHealthPoints > 0)
+            if (this.wave.GetCity().WallHealthPoints > 0)
             {
-                this.wave.City.HurtWall(this.wave.ZombiesAlive.Count);
-                this.wave.PrintMessage("Zombies attack wall");
+                this.wave.GetCity().HurtWall(this.wave.ZombiesAlive.Count);
+                UserInterface.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.Dispatcher.DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.City.SoldiersAlive);
-                this.wave.PrintMessage("Zombies attack soldiers");
+                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.ZombiesAlive.Count, this.wave.GetCity().SoldiersAlive);
+                UserInterface.PrintMessage("Zombies attack soldiers");
             }
 
-            this.wave.WaitPlayer();
+            UserInterface.ReadMessage();
         }
     }
 }

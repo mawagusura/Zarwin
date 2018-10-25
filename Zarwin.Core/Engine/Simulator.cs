@@ -11,17 +11,12 @@ namespace Zarwin.Core.Engine
 {
     public class Simulator : IInstantSimulator
     {
-        private Boolean Player { get; }
-
         public Simulator(Boolean player)
         {
-            this.Player = player;
+            UserInterface.SetUserPlaying(player);
             Soldier.NextId = 1;
         }
 
-        /// <summary>
-        /// Run a simulation of the game
-        /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         public Result Run(Parameters parameters)
@@ -31,7 +26,7 @@ namespace Zarwin.Core.Engine
             Wave wave=null;
             List<Order> orders = new List<Order>(parameters.Orders);
             List<Order> currentOrders= new List<Order>();
-            //Run a number of run based on the parameter
+
             for (int i = 0; i < parameters.WavesToRun; i++)
             {
                 currentOrders.Clear();
@@ -42,25 +37,24 @@ namespace Zarwin.Core.Engine
                 }
                 
 
-                UserInterface.PrintMessage("Wave n° " + i,Player);
+                UserInterface.PrintMessage("Wave n° " + i);
 
                 if (parameters.HordeParameters.Waves.Length <= i)
                 {
-                    wave = new Wave(parameters.HordeParameters.Waves[0],city, parameters.DamageDispatcher,this.Player, currentOrders);
+                    wave = new Wave(parameters.HordeParameters.Waves[0],city, parameters.DamageDispatcher, currentOrders);
                 }
                 else
                 {
-                    wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher,
-                        this.Player, currentOrders);
+                    wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher, currentOrders);
                 }
-                //Exist the game when the game is over
-                if (wave.City.GameOver())
+
+                if (wave.GetCity().GameOver())
                 {
                     waveResults.Add(wave.WaveResult());
                     break;
                 }
 
-                //Run a wave
+
                 else
                 {
                     wave.Run();
@@ -69,6 +63,5 @@ namespace Zarwin.Core.Engine
             }
             return new Result(waveResults.ToArray());
         }
-        
     }
 }

@@ -11,9 +11,8 @@ namespace Zarwin.Core.Application
         [ExcludeFromCodeCoverage]
         public static int Main()
         {
-            UserInterface.PrintMessage("Start",true);
-
             Simulator sim = new Simulator(true);
+            UserInterface.PrintMessage("Start");
             List<SoldierParameters> soldiers=new List<SoldierParameters>();
             for(int i = 1; i <= 2; i++)
             {
@@ -30,7 +29,7 @@ namespace Zarwin.Core.Application
              */
             sim.Run(new Parameters(5,new DamageDispatcher(new ItemSelector()),new HordeParameters(5),new CityParameters(3),new Order[1], soldiers.ToArray()));
 
-            UserInterface.PrintMessage("End",true);
+            UserInterface.PrintMessage("End");
             return 0;
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarwin.Core.Engine.Tool;
 using Zarwin.Core.Engine.Turn;
 using Zarwin.Core.Entity;
 using Zarwin.Shared.Contracts.Core;
@@ -12,50 +11,40 @@ namespace Zarwin.Core.Engine
 {
     public class Wave
     {
-        public List<Zombie> Zombies { get;} = new List<Zombie>();
-        public City City { get; }
-        private Boolean Player { get; }
+        private List<Zombie> zombies = new List<Zombie>();
+        private readonly City city;
+        private readonly IDamageDispatcher dispatcher;
+        private readonly TurnResult initialResult;
+        private List<TurnResult> turnResults = new List<TurnResult>();
+        private readonly List<Order> orders = new List<Order>();
 
+        public List<Zombie> ZombiesAlive => zombies.Where(z => z.HealthPoints > 0).ToList();
 
-        public IDamageDispatcher Dispatcher { get; }
-        private TurnResult InitialResult { get; set; }
-        private List<TurnResult> TurnResults { get; }
-
-        public List<Order> Orders { get; } = new List<Order>();
-
-        public List<Zombie> ZombiesAlive => Zombies.Where(z => z.HealthPoints > 0).ToList();
-
-        /// <summary>
-        /// Create a wave 
-        /// </summary>
+        
         /// <param name="waveParameter"></param>
         /// <param name="city"></param>
         /// <param name="dispatcher"></param>
         /// <param name="waiting"></param>
-        public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, Boolean waiting, List<Order> orders)
+        public Wave(WaveHordeParameters waveParameter, City city, IDamageDispatcher dispatcher, List<Order> orders)
         {
             foreach(ZombieParameter z in waveParameter.ZombieTypes)
             {
                 for (int i=0; i < z.Count; i++)
                 {
-                    Zombies.Add(new Zombie(z));
+                    zombies.Add(new Zombie(z));
                 }
             }
-
             // Sort zombies
-            Zombies.Sort();
+            zombies.Sort();
 
-            this.City = city;
-            this.Player = waiting;
-            this.Dispatcher = dispatcher;
-            this.Orders.AddRange(orders);
+            this.city = city;
+            this.dispatcher = dispatcher;
+            this.orders.AddRange(orders);
             
-            this.InitialResult = this.CurrentTurnResult();
-
-            this.TurnResults = new List<TurnResult>();
+            this.initialResult = this.CurrentTurnResult();
 
             ExecuteOrder();
-            this.City.ExecuteActions();
+            this.city.ExecuteActions();
         }
 
 
@@ -65,18 +54,18 @@ namespace Zarwin.Core.Engine
         /// </summary>
         public void Run()
         {
-            this.TurnResults.Add(new ApproachTurn(this).Run());
-            while (!this.IsOver() && !this.City.GameOver())
+            this.turnResults.Add(new ApproachTurn(this).Run());
+            while (!this.IsOver && !this.city.GameOver())
             {
                 ExecuteOrder();
-                this.TurnResults.Add(new SiegeTurn(this).Run());
+                this.turnResults.Add(new SiegeTurn(this).Run());
             }
         }
 
         /// <summary>
         /// A wave is over when all zombies died
         /// </summary>
-        public Boolean IsOver() => ZombiesAlive.Count==0;
+        public Boolean IsOver => ZombiesAlive.Count==0;
 
         /// <summary>
         /// A soldier kill zombies based on it attack and the number of zombies still "alive"
@@ -85,39 +74,21 @@ namespace Zarwin.Core.Engine
         /// <param name="soldier"></param>
         public void KillZombies(Soldier soldier)
         {
-            Zombies.Sort();
+            zombies.Sort();
             int attack = soldier.AttackPoints;
 
-            while (attack > 0 && ZombiesAlive.Count>0)
+            while (attack > 0 && !IsOver)
             {
                 Zombie temp = ZombiesAlive[0];
                 int def = temp.HealthPoints;
-                temp.Hurt(attack, TurnResults.Count);
+                temp.Hurt(attack, turnResults.Count);
                 attack -= def;
                 if (temp.HealthPoints == 0)
                 {
                     soldier.LevelUp();
-                    this.City.IncreaseMoney(1);
+                    this.city.IncreaseMoney(1);
                 }
             }
-
-        }
-
-        /// <summary>
-        /// If the wave is played by a player, each phase the player have to valide
-        /// </summary>
-        public void WaitPlayer()
-        {
-            UserInterface.ReadMessage(this.Player);
-        }
-
-        /// <summary>
-        /// Print a message to the user
-        /// </summary>
-        /// <param name="message"></param>
-        public void PrintMessage(String message)
-        {
-            UserInterface.PrintMessage(message, this.Player);
         }
 
         //States 
@@ -136,23 +107,28 @@ namespace Zarwin.Core.Engine
         /// </summary>
         /// <returns></returns>
         public TurnResult CurrentTurnResult()
-           => new TurnResult(this.City.SoldierState.ToArray(), this.HordeState(), this.City.WallHealthPoints, this.City.Money);
+           => new TurnResult(this.city.SoldierState.ToArray(), this.HordeState(), this.city.WallHealthPoints, this.city.Money);
 
-        /// <summary>
-        /// Create a WaveResult of the current situation
-        /// </summary>
-        /// <returns></returns>
-        public WaveResult WaveResult()=> new WaveResult(this.InitialResult, this.TurnResults.ToArray());
+        
+        public WaveResult WaveResult()=> new WaveResult(this.initialResult, this.turnResults.ToArray());
 
-        /// <summary> 
-        /// Execute all order for the current order 
-        /// </summary> 
+        
         private void ExecuteOrder()
         {
-            foreach(Order o in this.Orders.Where(order => order.TurnIndex == this.TurnResults.Count))
+            foreach(Order o in this.orders.Where(order => order.TurnIndex == this.turnResults.Count))
             {
-                this.City.ExecuteOrder(o.Type,o.TargetSoldier);
+                this.city.ExecuteOrder(o.Type,o.TargetSoldier);
             }
+        }
+
+        public City GetCity()
+        {
+            return this.city;
+        }
+
+        public IDamageDispatcher GetDamageDispatcher()
+        {
+            return this.dispatcher;
         }
     }
 }

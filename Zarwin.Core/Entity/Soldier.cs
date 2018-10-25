@@ -1,5 +1,4 @@
-﻿using System;
-using Zarwin.Core.Entity.Weapon;
+﻿using Zarwin.Core.Entity.Weapon;
 using Zarwin.Core.Exceptions;
 using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
@@ -13,7 +12,7 @@ namespace Zarwin.Core.Entity
 
         public int Id { get; private set; }
 
-        public int HealthPoints { get; set; }
+        public int HealthPoints { get; private set; }
 
         public int Level { get; private set; } = 1;
 
@@ -26,7 +25,7 @@ namespace Zarwin.Core.Entity
         //Attack points start from 1 and up by 1 every 10 level
         //(lvl:11 = 2d, lvl:21 = 3d ...)
         public int AttackPoints
-            => ((int)  (1 + Math.Floor((decimal) (Level - 1) / 10))* this.Weapon.AttackMultiplier(city));
+            => (1 +(Level - 1) / 10)* this.Weapon.AttackMultiplier(city);
 
         public Soldier(City city)
         {
@@ -67,7 +66,10 @@ namespace Zarwin.Core.Entity
         public void LevelUp()
         {
             Level++;
-            if(HealthPoints < MaxHealthPoints) HealthPoints++;
+            if (HealthPoints < MaxHealthPoints)
+            {
+                HealthPoints++;
+            }
         }
 
     }

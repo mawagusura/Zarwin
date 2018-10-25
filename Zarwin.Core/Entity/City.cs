@@ -11,7 +11,7 @@ namespace Zarwin.Core.Entity
     {
         private const int PriceUpgrade = 10;
 
-        public int WallHealthPoints { get; set; } = 10;
+        public int WallHealthPoints { get; private set; } = 10;
 
         public List<Soldier> Soldiers { get; } = new List<Soldier>();
 
@@ -20,16 +20,10 @@ namespace Zarwin.Core.Entity
         public Queue<Action> Actions { get; } = new Queue<Action>();
 
         public List<SoldierState> SoldierState
-        {
-            get
-            {
-                List<SoldierState> states = new List<SoldierState>();
-                SoldiersAlive.ForEach(sold => states.Add(new SoldierState(sold.Id, sold.Level, sold.HealthPoints)));
-                return states;
-            }
-        }
+            => SoldiersAlive.Select(s => new SoldierState(s.Id, s.Level, s.HealthPoints)).ToList();
+
         
-        public List<Soldier> SoldiersWithoutWeapon => Soldiers.Where( soldier => soldier.Weapon.GetType()== typeof(Hand)).ToList();
+        public List<Soldier> SoldiersWithoutWeapon => SoldiersAlive.Where( soldier => soldier.Weapon.GetType()== typeof(Hand)).ToList();
 
         public List<Soldier> SoldiersAlive => Soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
 

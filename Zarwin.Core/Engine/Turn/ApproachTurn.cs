@@ -15,7 +15,7 @@ namespace Zarwin.Core.Engine.Turn
         {
             UserInterface.PrintMessage("Horde in approach");
             UserInterface.ReadMessage();
-            return this.wave.CurrentTurnResult();
+            return this.wave.CurrentTurnResult;
         }
     }
 }

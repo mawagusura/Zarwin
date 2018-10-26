@@ -11,13 +11,13 @@ namespace Zarwin.Core.Entity
     {
         private const int PriceUpgrade = 10;
 
-        private readonly Wall wall = new Wall();
-
         public int Money { get; set;  } = 0;
 
         public Queue<Action> Actions { get; } = new Queue<Action>();
 
-        private readonly Squad squad;
+        public Squad Squad { get; }
+
+        public Wall Wall { get; } = new Wall();
 
         /// <summary>
         ///Empty constructor for unit tests
@@ -32,8 +32,8 @@ namespace Zarwin.Core.Entity
         /// <param name="soldierParameters"></param>
         public City(CityParameters cityParameter, Squad squad)
         {
-            this.squad = squad;
-            this.wall =new Wall(cityParameter.WallHealthPoints);
+            this.Squad = squad;
+            this.Wall =new Wall(cityParameter.WallHealthPoints);
             this.Money = cityParameter.InitialMoney;
         }
         
@@ -41,6 +41,7 @@ namespace Zarwin.Core.Entity
         {
             this.Money += money;
         }
+
         public void ExecuteActions()
         {
             while (this.Actions.Count > 0)
@@ -51,15 +52,14 @@ namespace Zarwin.Core.Entity
 
         public void ExecuteOrder(OrderType orderType,int? targetSoldier)
         {
-            if (Money >= PriceUpgrade)
-            {
-                Money -= PriceUpgrade;
-            }
-            else
+            if (Money < PriceUpgrade)
             {
                 return;
             }
-                switch (orderType)
+
+            Money -= PriceUpgrade;
+
+            switch (orderType)
             {
                 case OrderType.RecruitSoldier:
                     this.BuyRecruitSoldier();
@@ -99,37 +99,28 @@ namespace Zarwin.Core.Entity
 
         private void BuyRecruitSoldier()
         {
-            this.Actions.Enqueue(this.squad.RecruitSoldier);
+            this.Actions.Enqueue(this.Squad.RecruitSoldier);
         }
 
 
         private void AddMachineGun(int id)
         {
-            this.squad.SoliderById(id).SetWeapon(new MachineGun(this.wall));
+            this.Squad.SoliderById(id).SetWeapon(new MachineGun(this.Wall));
         }
 
         private void AddMachineGun()
         {
-            this.squad.SoldiersWithoutWeapon[0].SetWeapon(new MachineGun(this.wall));
+            this.Squad.SoldiersWithoutWeapon[0].SetWeapon(new MachineGun(this.Wall));
         }
 
         private void AddShotgun()
         {
-            this.squad.SoldiersWithoutWeapon[0].SetWeapon(new Shotgun(this.wall));
+            this.Squad.SoldiersWithoutWeapon[0].SetWeapon(new Shotgun(this.Wall));
         }
         private void AddShotgun(int id)
         {
-            this.squad.SoliderById(id).SetWeapon(new Shotgun(this.wall));
+            this.Squad.SoliderById(id).SetWeapon(new Shotgun(this.Wall));
         }
 
-        public Wall GetWall()
-        {
-            return this.wall;
-        }
-
-        public Squad GetSquad()
-        {
-            return this.squad;
-        }
     }
 }

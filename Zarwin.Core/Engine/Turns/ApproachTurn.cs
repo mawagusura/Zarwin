@@ -1,7 +1,7 @@
 ﻿using Zarwin.Core.Engine.Tool;
 using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Engine.Turn
+namespace Zarwin.Core.Engine.Turns
 {
     class ApproachTurn : Turn
     {
@@ -15,7 +15,7 @@ namespace Zarwin.Core.Engine.Turn
         {
             UserInterface.PrintMessage("Horde in approach");
             UserInterface.ReadMessage();
-            return this.wave.CurrentTurnResult();
+            return this.wave.CurrentTurnResult;
         }
     }
 }

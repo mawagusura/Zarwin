@@ -1,6 +1,6 @@
 ﻿using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Engine.Turn
+namespace Zarwin.Core.Engine.Turns
 {
     public abstract class Turn 
     {

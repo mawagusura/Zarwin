@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Zarwin.Shared.Contracts.Input;
 
-namespace Zarwin.Core.Entity
+namespace Zarwin.Core.Entity.Zombies
 {
     public class Zombie : IComparable<Zombie>
     {

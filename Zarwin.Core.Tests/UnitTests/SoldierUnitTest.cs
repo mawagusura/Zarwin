@@ -1,6 +1,6 @@
 ﻿using System;
 using Xunit;
-using Zarwin.Core.Entity;
+using Zarwin.Core.Entity.Soldiers;
 using Zarwin.Core.Exceptions;
 using Zarwin.Shared.Contracts.Input;
 

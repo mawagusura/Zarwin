@@ -1,9 +1,8 @@
 ﻿using Zarwin.Core.Engine.Tool;
-using Zarwin.Core.Entity;
+using Zarwin.Core.Entity.Soldiers;
 using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Engine.Turn
-{
+namespace Zarwin.Core.Engine.Turns { 
     public class SiegeTurn : Turn
     {
         public SiegeTurn(Wave wave) : base(wave){}
@@ -14,23 +13,23 @@ namespace Zarwin.Core.Engine.Turn
         /// <returns></returns>
         public override TurnResult Run()
         {
-            this.ZombiePhase();
-            this.SoldierPhase();
+            this.RunZombiePhase();
+            this.RunSoldierPhase();
 
-            return this.wave.CurrentTurnResult();
+            return this.wave.CurrentTurnResult;
         }
 
         /// <summary>
         /// Each soldier alive attack the horde
         /// </summary>
-        private void SoldierPhase()
+        private void RunSoldierPhase()
         {
-            foreach (Soldier soldier in this.wave.GetCity().GetSquad().SoldiersAlive)
+            foreach (Soldier soldier in this.wave.City.Squad.SoldiersAlive)
             {
                 if (soldier.HealthPoints > 0)
                 {
                     UserInterface.PrintMessage("Solider n°" + soldier.Id + " attacks");
-                    this.wave.GetCity().IncreaseMoney(this.wave.GetHorde().KillZombies(soldier,this.wave.GetTurnNumber()));
+                    this.wave.City.IncreaseMoney(this.wave.Horde.AttackZombies(soldier,this.wave.TurnCount));
 
                     UserInterface.ReadMessage();
                 }
@@ -40,16 +39,16 @@ namespace Zarwin.Core.Engine.Turn
         /// <summary>
         /// The horde attack the wall, if the city got one, else they attack the soldiers.
         /// </summary>
-        private void ZombiePhase()
+        private void RunZombiePhase()
         {
-            if (this.wave.GetCity().GetWall().HealthPoints > 0)
+            if (this.wave.City.Wall.HealthPoints > 0)
             {
-                this.wave.GetCity().GetWall().Hurt(this.wave.GetHorde().ZombiesAlive.Count);
+                this.wave.City.Wall.Hurt(this.wave.Horde.ZombiesAlive.Count);
                 UserInterface.PrintMessage("Zombies attack wall");
             }
             else
             {
-                this.wave.GetDamageDispatcher().DispatchDamage(this.wave.GetHorde().ZombiesAlive.Count, this.wave.GetCity().GetSquad().SoldiersAlive);
+                this.wave.Dispatcher.DispatchDamage(this.wave.Horde.ZombiesAlive.Count, this.wave.City.Squad.SoldiersAlive);
                 UserInterface.PrintMessage("Zombies attack soldiers");
             }
 

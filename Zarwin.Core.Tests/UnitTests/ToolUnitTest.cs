@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Xunit;
 using Zarwin.Core.Engine.Tool;
-using Zarwin.Core.Entity;
+using Zarwin.Core.Entity.Soldiers;
 using Zarwin.Shared.Contracts.Core;
 
 namespace Zarwin.Core.Tests.UnitTests

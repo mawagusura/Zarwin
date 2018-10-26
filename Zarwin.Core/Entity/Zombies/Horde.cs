@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zarwin.Core.Entity.Soldiers;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Entity
+namespace Zarwin.Core.Entity.Zombies
 {
     public class Horde
     {
@@ -29,20 +30,18 @@ namespace Zarwin.Core.Entity
         /// Create an HordeState of the current situation
         /// </summary>
         /// <returns></returns>
-        public HordeState HordeState()
+        public HordeState HordeState 
             => new HordeState(ZombiesAlive.Count);
 
         public Boolean IsAlive()
-        {
-            return this.ZombiesAlive.Count == 0;
-        }
+            => this.ZombiesAlive.Count == 0;
 
         /// <summary>
         /// A soldier kill zombies based on it attack and the number of zombies still "alive"
         /// The soldier levelup foreach zombie killed
         /// </summary>
         /// <param name="soldier"></param>
-        public int KillZombies(Soldier soldier, int turn)
+        public int AttackZombies(Soldier soldier, int turn)
         {
             zombies.Sort();
             int attack = soldier.AttackPoints;

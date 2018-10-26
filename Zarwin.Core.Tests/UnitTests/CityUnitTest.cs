@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Xunit;
-using Zarwin.Core.Entity;
-using Zarwin.Core.Entity.SoldierWeapon;
+using Zarwin.Core.Entity.Cities;
+using Zarwin.Core.Entity.Soldiers;
+using Zarwin.Core.Entity.Soldiers.Weapons;
 using Zarwin.Shared.Contracts.Input;
 
 namespace Zarwin.Core.Tests.UnitTests
@@ -26,12 +27,12 @@ namespace Zarwin.Core.Tests.UnitTests
             List<SoldierParameters> parameters = new List<SoldierParameters>() { new SoldierParameters(1, 1) };
             Squad squad= new Squad(parameters);
             city = new City(new CityParameters(5), squad);
-            Assert.Equal(5, city.GetWall().HealthPoints);
-            Assert.NotEmpty(city.GetSquad().SoldiersAlive);
+            Assert.Equal(5, city.Wall.HealthPoints);
+            Assert.NotEmpty(city.Squad.SoldiersAlive);
         }
 
         ///
-        /// Tests on HurtWall() method
+        /// Tests on Wall Hurt() method
         ///
 
         /// <summary>
@@ -41,8 +42,8 @@ namespace Zarwin.Core.Tests.UnitTests
         public void HurtWallMoreThanHealth()
         {
             city = new City();
-            city.GetWall().Hurt(city.GetWall().HealthPoints+ 1);
-            Assert.Equal(0, city.GetWall().HealthPoints);
+            city.Wall.Hurt(city.Wall.HealthPoints+ 1);
+            Assert.Equal(0, city.Wall.HealthPoints);
         }
 
         /// <summary>
@@ -52,9 +53,9 @@ namespace Zarwin.Core.Tests.UnitTests
         public void HurtWallOneDamage()
         {
             city = new City();
-            int health = city.GetWall().HealthPoints;
-            city.GetWall().Hurt(1);
-            Assert.Equal(health - 1, city.GetWall().HealthPoints);
+            int health = city.Wall.HealthPoints;
+            city.Wall.Hurt(1);
+            Assert.Equal(health - 1, city.Wall.HealthPoints);
         }
 
 
@@ -65,9 +66,9 @@ namespace Zarwin.Core.Tests.UnitTests
         public void HurtWallMultipleDamage()
         {
             city = new City();
-            int health = city.GetWall().HealthPoints ;
-            city.GetWall().Hurt(health - 1);
-            Assert.Equal(1, city.GetWall().HealthPoints);
+            int health = city.Wall.HealthPoints ;
+            city.Wall.Hurt(health - 1);
+            Assert.Equal(1, city.Wall.HealthPoints);
         }
 
         [Fact]
@@ -83,7 +84,7 @@ namespace Zarwin.Core.Tests.UnitTests
             city.IncreaseMoney(10);
             city.ExecuteOrder(OrderType.EquipWithMachineGun,null);
             city.ExecuteActions();
-            Assert.Equal(typeof(MachineGun), city.GetSquad().SoldiersAlive[0].GetWeapon().GetType());
+            Assert.IsType<MachineGun>(city.Squad.SoldiersAlive[0].Weapon);
         }
 
         [Fact]
@@ -99,7 +100,7 @@ namespace Zarwin.Core.Tests.UnitTests
             city.IncreaseMoney(10);
             city.ExecuteOrder(OrderType.EquipWithShotgun, null);
             city.ExecuteActions();
-            Assert.Equal(typeof(Shotgun), city.GetSquad().SoldiersAlive[0].GetWeapon().GetType()); 
+            Assert.IsType<Shotgun>(city.Squad.SoldiersAlive[0].Weapon); 
         }
 
         [Fact]
@@ -114,7 +115,7 @@ namespace Zarwin.Core.Tests.UnitTests
 
             city.ExecuteOrder(OrderType.EquipWithMachineGun, null);
             city.ExecuteActions();
-            Assert.Equal(typeof(Hand), city.GetSquad().SoldiersAlive[0].GetWeapon().GetType());
+            Assert.IsType<Hand>(city.Squad.SoldiersAlive[0].Weapon);
         }
         
     }

@@ -1,5 +1,5 @@
 ﻿
-namespace Zarwin.Core.Entity
+namespace Zarwin.Core.Entity.Cities
 {
     public class Wall
     {

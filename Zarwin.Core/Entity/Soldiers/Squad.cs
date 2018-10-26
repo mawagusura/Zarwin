@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarwin.Core.Entity.SoldierWeapon;
+using Zarwin.Core.Entity.Soldiers.Weapons;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
-namespace Zarwin.Core.Entity
+namespace Zarwin.Core.Entity.Soldiers
 {
     public class Squad
     {
@@ -15,7 +15,7 @@ namespace Zarwin.Core.Entity
         public List<SoldierState> SoldierState
             => SoldiersAlive.Select(s => new SoldierState(s.Id, s.Level, s.HealthPoints)).ToList();
 
-        public List<Soldier> SoldiersWithoutWeapon => SoldiersAlive.Where(soldier => soldier.GetWeapon().GetType() == typeof(Hand)).ToList();
+        public List<Soldier> SoldiersWithoutWeapon => SoldiersAlive.Where(soldier => soldier.Weapon is Hand).ToList();
 
         public List<Soldier> SoldiersAlive => soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
 
@@ -33,9 +33,7 @@ namespace Zarwin.Core.Entity
             this.soldiers.Add(new Soldier());
         }
 
-        public Boolean IsAlive()
-        {
-            return (this.soldiers.Sum(soldier => soldier.HealthPoints) == 0) || (this.soldiers.Count == 0);
-        }
+        public Boolean IsAlive
+            => (this.soldiers.Sum(soldier => soldier.HealthPoints) > 0) && (this.soldiers.Count > 0);
     }
 }

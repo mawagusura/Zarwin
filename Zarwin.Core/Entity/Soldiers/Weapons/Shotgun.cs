@@ -1,5 +1,6 @@
-﻿
-namespace Zarwin.Core.Entity.SoldierWeapon
+﻿using Zarwin.Core.Entity.Cities;
+
+namespace Zarwin.Core.Entity.Soldiers.Weapons
 {
     public class Shotgun : Weapon
     {

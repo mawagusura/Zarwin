@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zarwin.Core.Engine.Tool;
-using Zarwin.Core.Entity;
+using Zarwin.Core.Entity.Cities;
+using Zarwin.Core.Entity.Soldiers;
 using Zarwin.Shared.Contracts;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
@@ -14,11 +15,9 @@ namespace Zarwin.Core.Engine
         public Simulator(Boolean player)
         {
             UserInterface.SetUserPlaying(player);
-            Soldier.NextId = 1;
+            Soldier.InitId();
         }
-
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        
         public Result Run(Parameters parameters)
         {
             City city = new City(parameters.CityParameters, new Squad(new List<SoldierParameters>(parameters.SoldierParameters)));
@@ -48,9 +47,9 @@ namespace Zarwin.Core.Engine
                     wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher, currentOrders);
                 }
 
-                if (city.GetSquad().IsAlive())
+                if (!city.Squad.IsAlive)
                 {
-                    waveResults.Add(wave.WaveResult());
+                    waveResults.Add(wave.WaveResult);
                     break;
                 }
 
@@ -58,7 +57,7 @@ namespace Zarwin.Core.Engine
                 else
                 {
                     wave.Run();
-                    waveResults.Add(wave.WaveResult());
+                    waveResults.Add(wave.WaveResult);
                 }
             }
             return new Result(waveResults.ToArray());

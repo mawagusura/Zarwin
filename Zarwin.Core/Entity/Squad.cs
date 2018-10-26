@@ -15,14 +15,11 @@ namespace Zarwin.Core.Entity
         public List<SoldierState> SoldierState
             => SoldiersAlive.Select(s => new SoldierState(s.Id, s.Level, s.HealthPoints)).ToList();
 
-        public List<Soldier> SoldiersWithoutWeapon 
-            => SoldiersAlive.Where(soldier => soldier.GetWeapon().GetType() == typeof(Hand)).ToList();
+        public List<Soldier> SoldiersWithoutWeapon => SoldiersAlive.Where(soldier => soldier.GetWeapon().GetType() == typeof(Hand)).ToList();
 
-        public List<Soldier> SoldiersAlive 
-            => soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
+        public List<Soldier> SoldiersAlive => soldiers.Where(soldier => soldier.HealthPoints > 0).ToList();
 
-        public Soldier SoliderById(int id) 
-            => soldiers.Where(soldier => soldier.Id == id).ToArray()[0];
+        public Soldier SoliderById(int id) => soldiers.Where(soldier => soldier.Id == id).ToArray()[0];
 
         public Squad(List<SoldierParameters> soldierParameters)
         {

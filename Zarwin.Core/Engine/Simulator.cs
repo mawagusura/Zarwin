@@ -17,6 +17,8 @@ namespace Zarwin.Core.Engine
             Soldier.NextId = 1;
         }
 
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public Result Run(Parameters parameters)
         {
             City city = new City(parameters.CityParameters, new Squad(new List<SoldierParameters>(parameters.SoldierParameters)));
@@ -33,6 +35,7 @@ namespace Zarwin.Core.Engine
                 {
                     currentOrders.AddRange(res.ToList());
                 }
+                
 
                 UserInterface.PrintMessage("Wave n° " + i);
 
@@ -45,15 +48,17 @@ namespace Zarwin.Core.Engine
                     wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher, currentOrders);
                 }
 
-                if (city.Squad.IsAlive())
+                if (city.GetSquad().IsAlive())
                 {
-                    waveResults.Add(wave.WaveResult);
+                    waveResults.Add(wave.WaveResult());
                     break;
                 }
+
+
                 else
                 {
                     wave.Run();
-                    waveResults.Add(wave.WaveResult);
+                    waveResults.Add(wave.WaveResult());
                 }
             }
             return new Result(waveResults.ToArray());

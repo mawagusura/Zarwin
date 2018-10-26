@@ -18,8 +18,7 @@ namespace Zarwin.Core.Engine
         private readonly TurnResult initialResult;
         private readonly List<TurnResult> turnResults = new List<TurnResult>();
         private readonly List<Order> orders = new List<Order>();
-
-        // States of the wave 
+        
         public TurnResult CurrentTurnResult
            => new TurnResult(this.City.Squad.SoldierState.ToArray(), this.Horde.HordeState, this.City.Wall.HealthPoints, this.City.Money);
 
@@ -52,7 +51,7 @@ namespace Zarwin.Core.Engine
         public void Run()
         {
             this.turnResults.Add(new ApproachTurn(this).Run());
-            while (!this.Horde.IsAlive() && this.City.Squad.IsAlive)
+            while (!this.Horde.IsAlive && this.City.Squad.IsAlive)
             {
                 ExecuteOrder();
                 this.turnResults.Add(new SiegeTurn(this).Run());

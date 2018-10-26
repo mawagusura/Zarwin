@@ -11,7 +11,14 @@ namespace Zarwin.Core.Entity.Zombies
     {
 
         private List<Zombie> zombies = new List<Zombie>();
-        public List<Zombie> ZombiesAlive => zombies.Where(z => z.HealthPoints > 0).ToList();
+        public List<Zombie> ZombiesAlive
+            => zombies.Where(z => z.HealthPoints > 0).ToList();
+        
+        public HordeState HordeState
+            => new HordeState(ZombiesAlive.Count);
+
+        public Boolean IsAlive
+            => this.ZombiesAlive.Count == 0;
 
         public Horde(ZombieParameter[] zombieParameters)
         {
@@ -27,16 +34,6 @@ namespace Zarwin.Core.Entity.Zombies
         }
 
         /// <summary>
-        /// Create an HordeState of the current situation
-        /// </summary>
-        /// <returns></returns>
-        public HordeState HordeState 
-            => new HordeState(ZombiesAlive.Count);
-
-        public Boolean IsAlive()
-            => this.ZombiesAlive.Count == 0;
-
-        /// <summary>
         /// A soldier kill zombies based on it attack and the number of zombies still "alive"
         /// The soldier levelup foreach zombie killed
         /// </summary>
@@ -46,7 +43,7 @@ namespace Zarwin.Core.Entity.Zombies
             zombies.Sort();
             int attack = soldier.AttackPoints;
             int zombieKilled = 0;
-            while (attack > 0 && !this.IsAlive())
+            while (attack > 0 && !this.IsAlive)
             {
                 Zombie temp = ZombiesAlive[0];
                 int def = temp.HealthPoints;

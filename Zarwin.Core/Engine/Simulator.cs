@@ -37,23 +37,14 @@ namespace Zarwin.Core.Engine
                 
 
                 UserInterface.PrintMessage("Wave n° " + i);
-
-                if (parameters.HordeParameters.Waves.Length <= i)
-                {
-                    wave = new Wave(parameters.HordeParameters.Waves[0],city, parameters.DamageDispatcher, currentOrders);
-                }
-                else
-                {
-                    wave = new Wave(parameters.HordeParameters.Waves[i], city, parameters.DamageDispatcher, currentOrders);
-                }
-
+                
+                wave = new Wave(parameters.HordeParameters.Waves[i %parameters.HordeParameters.Waves.Length],city, parameters.DamageDispatcher, currentOrders);
+                
                 if (!city.Squad.IsAlive)
                 {
                     waveResults.Add(wave.WaveResult);
                     break;
                 }
-
-
                 else
                 {
                     wave.Run();

@@ -68,10 +68,7 @@ namespace Zarwin.Core.Entity.Squads
         public void LevelUp()
         {
             Level++;
-            if (HealthPoints < MaxHealthPoints)
-            {
-                HealthPoints++;
-            }
+            HealthPoints++;
         }
 
         public void SetWeapon(Weapon weapon)

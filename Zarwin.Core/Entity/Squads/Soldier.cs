@@ -1,15 +1,13 @@
-﻿using System;
-using Zarwin.Core.Entity.Soldiers.Weapons;
+﻿using Zarwin.Core.Entity.Squads.Weapons;
 using Zarwin.Core.Exceptions;
 using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
 
-namespace Zarwin.Core.Entity.Soldiers
+namespace Zarwin.Core.Entity.Squads
 {
     public class Soldier : ISoldier
     {
-        // auto-increment id
-        public static int NextId { get; private set; } = 1;
+        private int MaxHealthPoints => 3 + Level;
 
         public int Id { get; private set; }
 
@@ -17,46 +15,30 @@ namespace Zarwin.Core.Entity.Soldiers
 
         public int Level { get; private set; } = 1;
 
-        public static void InitId()
-        {
-            Soldier.NextId = 1;
-        }
+        public Squad Squad { get; }
 
-        public Weapon Weapon { get; private set; } = new Hand(null);
-
-        private int MaxHealthPoints => 3 + Level;
-
-        public void SetWeapon(Weapon weapon)
-        {
-            if(this.Weapon is Hand)
-            {
-                this.Weapon = weapon;
-            }
-        }
-
+        public Weapon Weapon { get; private set; }
+               
         //Attack points start from 1 and up by 1 every 10 level
         //(lvl:11 = 2d, lvl:21 = 3d ...)
         public int AttackPoints
             => (1 +(Level - 1) / 10)* this.Weapon.AttackMultiplier();
 
-        public Soldier()
-        {
-            Id = NextId++;
-            HealthPoints = MaxHealthPoints;
-        }
+        public Soldier(int id, Squad squad) : this(new SoldierParameters(id, 1), squad) { }
 
         /// <summary>
         /// Create a soldier based on parameter
         /// </summary>
         /// <param name="soldierParameters"></param>
-        public Soldier(SoldierParameters soldierParameters)
+        public Soldier(SoldierParameters soldierParameters,Squad squad)
         {
             if (soldierParameters.Id < 0 || soldierParameters.Level < 1) throw new WrongParameterException("Parameters with wrong values");
 
-            Id = soldierParameters.Id;
-            Level = soldierParameters.Level;
-            HealthPoints = MaxHealthPoints;
-            NextId++;
+            this.Id = soldierParameters.Id;
+            this.Level = soldierParameters.Level;
+            this.HealthPoints = MaxHealthPoints;
+            this.Squad = squad;
+            this.Weapon= new Hand(null);
         }
 
         /// <summary>
@@ -65,7 +47,17 @@ namespace Zarwin.Core.Entity.Soldiers
         /// <param name="damage"></param>
         public void Hurt(int damage)
         {
-            HealthPoints = damage > HealthPoints ? 0 : HealthPoints - damage;
+            if(damage < HealthPoints)
+            {
+                HealthPoints -= damage;
+                this.Squad.City.UserInterface.InvokeSoliderHit(this.Id, damage);
+                
+            }
+            else
+            {
+                HealthPoints = 0;
+                this.Squad.City.UserInterface.InvokeSoliderDown(this.Id);
+            }
         }
 
         /// <summary>
@@ -82,5 +74,12 @@ namespace Zarwin.Core.Entity.Soldiers
             }
         }
 
+        public void SetWeapon(Weapon weapon)
+        {
+            if (this.Weapon is Hand)
+            {
+                this.Weapon = weapon;
+            }
+        }
     }
 }

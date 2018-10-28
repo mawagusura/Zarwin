@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 using Zarwin.Core.Entity.Cities;
-using Zarwin.Core.Entity.Soldiers;
-using Zarwin.Core.Entity.Soldiers.Weapons;
+using Zarwin.Core.Entity.Squads;
+using Zarwin.Core.Entity.Squads.Weapons;
 using Zarwin.Shared.Contracts.Input;
 
 namespace Zarwin.Core.Tests.UnitTests
 {
     public class CityUnitTest
     {
-        private City city;
-
-
         ///
         /// Constructor tests
         ///
@@ -23,12 +20,12 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void InitCityWithParameters()
         {
-
-            List<SoldierParameters> parameters = new List<SoldierParameters>() { new SoldierParameters(1, 1) };
-            Squad squad= new Squad(parameters);
-            city = new City(new CityParameters(5), squad);
+            SoldierParameters[] soldierParameters = {new SoldierParameters(13, 5) };
+            City city = new City(new CityParameters(5,3), soldierParameters, new Engine.Tool.UserInterface(false));
             Assert.Equal(5, city.Wall.HealthPoints);
-            Assert.NotEmpty(city.Squad.SoldiersAlive);
+            Assert.Equal(3, city.Money);
+            Assert.Equal(13, city.Squad.SoldiersAlive[0].Id);
+            Assert.Equal(5, city.Squad.SoldiersAlive[0].Level);
         }
 
         ///
@@ -41,7 +38,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtWallMoreThanHealth()
         {
-            city = new City();
+            City city = new City();
             city.Wall.Hurt(city.Wall.HealthPoints+ 1);
             Assert.Equal(0, city.Wall.HealthPoints);
         }
@@ -52,7 +49,7 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtWallOneDamage()
         {
-            city = new City();
+            City city = new City();
             int health = city.Wall.HealthPoints;
             city.Wall.Hurt(1);
             Assert.Equal(health - 1, city.Wall.HealthPoints);
@@ -65,58 +62,71 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void HurtWallMultipleDamage()
         {
-            city = new City();
+            City city = new City();
             int health = city.Wall.HealthPoints ;
             city.Wall.Hurt(health - 1);
             Assert.Equal(1, city.Wall.HealthPoints);
+        }
+        
+        [Fact]
+        public void BuyOrder()
+        {
+            City city = new City();
+            city.IncreaseMoney(15);
+            Assert.True(city.BuyOrder());
+            Assert.Equal(5, city.Money);
+        }
+
+        [Fact]
+        public void CanNotBuyOrder()
+        {
+            City city = new City();
+            city.IncreaseMoney(5);
+            Assert.False(city.BuyOrder());
+            Assert.Equal(5, city.Money);
+        }
+
+        [Fact]
+        public void BuyRecruiteSoldier()
+        {
+            City city = new City();
+            city.IncreaseMoney(10);
+
+
+            city.OrderHandler.BuyOrders(new Order(0, 0, OrderType.RecruitSoldier));
+            city.OrderHandler.ExecuteOrders();
+
+            Assert.Single(city.Squad.SoldiersAlive);
         }
 
         [Fact]
         public void BuyMachineGun()
         {
-            List<SoldierParameters> param = new List<SoldierParameters>
-            {
-                new SoldierParameters(1, 1)
-            };
-            Squad squad = new Squad(param);
-            City city = new City(new CityParameters(10),squad);
-           
+            City city = new City();
+            city.Squad.RecruitSoldier();
             city.IncreaseMoney(10);
-            city.ExecuteOrder(OrderType.EquipWithMachineGun,null);
-            city.ExecuteActions();
+
+
+            city.OrderHandler.BuyOrders(new Order(0, 0, OrderType.EquipWithMachineGun));
+            city.OrderHandler.ExecuteOrders();
+
             Assert.IsType<MachineGun>(city.Squad.SoldiersAlive[0].Weapon);
+            Assert.Equal(0, city.Money);
         }
 
         [Fact]
         public void BuyShotgun()
         {
-            List<SoldierParameters> param = new List<SoldierParameters>
-            {
-                new SoldierParameters(1, 1)
-            };
-            Squad squad = new Squad(param);
-            City city = new City(new CityParameters(10), squad);
-
+            City city = new City();
+            city.Squad.RecruitSoldier();
             city.IncreaseMoney(10);
-            city.ExecuteOrder(OrderType.EquipWithShotgun, null);
-            city.ExecuteActions();
-            Assert.IsType<Shotgun>(city.Squad.SoldiersAlive[0].Weapon); 
-        }
 
-        [Fact]
-        public void NotEnoughMoney()
-        {
-            List<SoldierParameters> param = new List<SoldierParameters>
-            {
-                new SoldierParameters(1, 1)
-            };
-            Squad squad = new Squad(param);
-            City city = new City(new CityParameters(10), squad);
 
-            city.ExecuteOrder(OrderType.EquipWithMachineGun, null);
-            city.ExecuteActions();
-            Assert.IsType<Hand>(city.Squad.SoldiersAlive[0].Weapon);
+            city.OrderHandler.BuyOrders(new Order(0, 0, OrderType.EquipWithShotgun));
+            city.OrderHandler.ExecuteOrders();
+
+            Assert.IsType<Shotgun>(city.Squad.SoldiersAlive[0].Weapon);
+            Assert.Equal(0, city.Money);
         }
-        
     }
 }

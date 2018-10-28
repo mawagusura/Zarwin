@@ -1,5 +1,5 @@
-﻿using Zarwin.Core.Engine.Tool;
-using Zarwin.Core.Entity.Soldiers;
+﻿using Zarwin.Core.Entity.Squads;
+using Zarwin.Core.Entity.Waves;
 using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine.Turns { 
@@ -16,7 +16,7 @@ namespace Zarwin.Core.Engine.Turns {
             this.RunZombiePhase();
             this.RunSoldierPhase();
 
-            return this.wave.CurrentTurnResult;
+            return this.Wave.CurrentTurnResult;
         }
 
         /// <summary>
@@ -24,15 +24,11 @@ namespace Zarwin.Core.Engine.Turns {
         /// </summary>
         private void RunSoldierPhase()
         {
-            foreach (Soldier soldier in this.wave.City.Squad.SoldiersAlive)
+            foreach (Soldier soldier in this.Wave.City.Squad.SoldiersAlive)
             {
-                if (soldier.HealthPoints > 0)
-                {
-                    UserInterface.PrintMessage("Solider n°" + soldier.Id + " attacks");
-                    this.wave.City.IncreaseMoney(this.wave.Horde.AttackZombies(soldier,this.wave.TurnCount));
+                this.Wave.City.IncreaseMoney(this.Wave.Horde.AttackZombies(soldier,this.Wave.TurnResults.Count));
 
-                    UserInterface.ReadMessage();
-                }
+                this.Wave.City.UserInterface.ReadMessage();
             }
         }
 
@@ -41,18 +37,17 @@ namespace Zarwin.Core.Engine.Turns {
         /// </summary>
         private void RunZombiePhase()
         {
-            if (this.wave.City.Wall.HealthPoints > 0)
+            if (this.Wave.City.Wall.HealthPoints > 0)
             {
-                this.wave.City.Wall.Hurt(this.wave.Horde.ZombiesAlive.Count);
-                UserInterface.PrintMessage("Zombies attack wall");
+                this.Wave.City.Wall.Hurt(this.Wave.Horde.ZombiesAlive.Count);
             }
             else
             {
-                this.wave.Dispatcher.DispatchDamage(this.wave.Horde.ZombiesAlive.Count, this.wave.City.Squad.SoldiersAlive);
-                UserInterface.PrintMessage("Zombies attack soldiers");
+                this.Wave.DamageDispatcher.DispatchDamage(
+                    this.Wave.Horde.ZombiesAlive.Count, this.Wave.City.Squad.SoldiersAlive);
             }
 
-            UserInterface.ReadMessage();
+            this.Wave.City.UserInterface.ReadMessage();
         }
     }
 }

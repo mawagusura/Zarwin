@@ -1,10 +1,11 @@
-﻿using Zarwin.Shared.Contracts.Output;
+﻿using Zarwin.Core.Entity.Waves;
+using Zarwin.Shared.Contracts.Output;
 
 namespace Zarwin.Core.Engine.Turns
 {
     public abstract class Turn 
     {
-        protected Wave wave;
+        protected Wave Wave { get; }
 
         /// <summary>
         /// The base of each turn
@@ -12,7 +13,7 @@ namespace Zarwin.Core.Engine.Turns
         /// <param name="wave"></param>
         public Turn(Wave wave)
         {
-            this.wave = wave;
+            this.Wave = wave;
         }
 
         public abstract TurnResult Run();

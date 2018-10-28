@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Xunit;
 using Zarwin.Core.Engine.Tool;
-using Zarwin.Core.Entity.Soldiers;
+using Zarwin.Core.Entity.Squads;
 using Zarwin.Shared.Contracts.Core;
 
 namespace Zarwin.Core.Tests.UnitTests
@@ -34,17 +34,15 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void TestDamageDispatcherDispatchAllDamage()
         {
+            Squad squad = new Squad();
             DamageDispatcher dispatcher = new DamageDispatcher(new ItemSelector());
-            List<ISoldier> soldiers = new List<ISoldier>();
-            Soldier s = new Soldier();
-            Soldier s2 = new Soldier();
-            soldiers.Add(s);
-            soldiers.Add(s2);
+            squad.RecruitSoldier();
+            squad.RecruitSoldier();
 
             int damageToDeal = 6;
-            int sumHPInit = soldiers.Sum(soldier => soldier.HealthPoints);
-            dispatcher.DispatchDamage(damageToDeal, soldiers);
-            Assert.True(soldiers.Sum(soldier => soldier.HealthPoints) == (sumHPInit - damageToDeal) );
+            int sumHPInit = squad.SoldiersAlive.Sum(soldier => soldier.HealthPoints);
+            dispatcher.DispatchDamage(damageToDeal, squad.SoldiersAlive);
+            Assert.True(squad.SoldiersAlive.Sum(soldier => soldier.HealthPoints) == (sumHPInit - damageToDeal) );
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace Zarwin.Core.Tests.UnitTests
         {
             DamageDispatcher dispatcher = new DamageDispatcher(new ItemSelector());
             List<ISoldier> soldiers = new List<ISoldier>();
-            Soldier s = new Soldier();
+            Soldier s = new Soldier(1, new Squad());
             soldiers.Add(s);
             Assert.True(s.HealthPoints == 4);
 
@@ -69,23 +67,130 @@ namespace Zarwin.Core.Tests.UnitTests
         [Fact]
         public void TestInput()
         {
+            UserInterface userInterface = new UserInterface(true);
             var input = new StringReader("Test");
             Console.SetIn(input);
-            UserInterface.SetUserPlaying(true);
-            Assert.Equal("Test", UserInterface.ReadMessage());
+            Assert.Equal("Test", userInterface.ReadMessage());
         }
 
-        /// <summary>
-        ///  Test on the UserInterface and the capacity to print a message
-        /// </summary>
         [Fact]
-        public void TestOutput()
+        public void TestOutputSoldierHit()
         {
+            UserInterface userInterface = new UserInterface(true);
             var output = new StringWriter();
             Console.SetOut(output);
-            UserInterface.SetUserPlaying(true);
-            UserInterface.PrintMessage("Test");
-            Assert.Equal("Test"+ Environment.NewLine, output.ToString());
+            userInterface.InvokeSoliderHit(1, 10);
+            Assert.Equal("Soldat #1 a perdu 10 PV." + Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputSoldierHit()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeSoliderHit(1,10);
+            Assert.Equal("", output.ToString());
+        }
+
+        [Fact]
+        public void TestOutputSoldierDown()
+        {
+            UserInterface userInterface = new UserInterface(true);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeSoliderDown(1);
+            Assert.Equal("Soldat #1 est tombé." + Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputSoldierDown()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeSoliderDown(10);
+            Assert.Equal("", output.ToString());
+        }
+
+        [Fact]
+        public void TestOutputSoldierKill()
+        {
+            UserInterface userInterface = new UserInterface(true);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeSoliderKill(1, 10);
+            Assert.Equal("Soldat #1 a tué 10 zombies." + Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputSoldierKill()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeSoliderKill(1, 1);
+            Assert.Equal("", output.ToString());
+        }
+
+        [Fact]
+        public void TestOutputEndTurn()
+        {
+            UserInterface userInterface = new UserInterface(true);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeEndTurn(10);
+            Assert.Equal("Fin du tour. Reste 10 zombies."+ Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputEndTurn()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeEndTurn(10);
+            Assert.Equal("", output.ToString());
+        }
+
+        [Fact]
+        public void TestOutputEndWave()
+        {
+            UserInterface userInterface = new UserInterface(true);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeEndWave();
+            Assert.Equal("Fin de vague." + Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputEndWave()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeEndWave();
+            Assert.Equal("", output.ToString());
+        }
+
+        [Fact]
+        public void TestOutputApproach()
+        {
+            UserInterface userInterface = new UserInterface(true);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeApproach();
+            Assert.Equal("Horde en approche." + Environment.NewLine, output.ToString());
+        }
+
+        [Fact]
+        public void TestNoOutputApproach()
+        {
+            UserInterface userInterface = new UserInterface(false);
+            var output = new StringWriter();
+            Console.SetOut(output);
+            userInterface.InvokeApproach();
+            Assert.Equal("", output.ToString());
         }
     }
 }

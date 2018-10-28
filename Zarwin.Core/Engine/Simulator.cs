@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Zarwin.Core.Engine.Tool;
 using Zarwin.Core.Entity.Cities;
-using Zarwin.Core.Entity.Soldiers;
+using Zarwin.Core.Entity.Waves;
 using Zarwin.Shared.Contracts;
+using Zarwin.Shared.Contracts.Core;
 using Zarwin.Shared.Contracts.Input;
 using Zarwin.Shared.Contracts.Output;
 
@@ -12,46 +13,56 @@ namespace Zarwin.Core.Engine
 {
     public class Simulator : IInstantSimulator
     {
+        public City City { get; private set; }
+        public UserInterface UserInterface { get; }
+
+        private readonly List<WaveResult> waveResults = new List<WaveResult>();
+
         public Simulator(Boolean player)
         {
-            UserInterface.SetUserPlaying(player);
-            Soldier.InitId();
+            this.UserInterface = new UserInterface(player);
         }
-        
-        public Result Run(Parameters parameters)
+        public void InitializeSimulator(Parameters parameters)
         {
-            City city = new City(parameters.CityParameters, new Squad(new List<SoldierParameters>(parameters.SoldierParameters)));
-            List<WaveResult> waveResults = new List<WaveResult>();
-            Wave wave=null;
-            List<Order> orders = new List<Order>(parameters.Orders);
-            List<Order> currentOrders= new List<Order>();
+            this.City = new City(parameters.CityParameters,parameters.SoldierParameters,this.UserInterface);
+        }
 
-            for (int i = 0; i < parameters.WavesToRun; i++)
+        private List<Order> CurrentOrders(Order[] orders,int wave)
+            => orders.Where(order => order.WaveIndex == wave).ToList();
+
+        private ZombieParameter[] CurrentWaveZombieParameters(HordeParameters hordeParameters, int wave)
+            => hordeParameters.Waves[wave % hordeParameters.Waves.Length].ZombieTypes;
+
+        public Result Run(Parameters parameters)
+        { 
+            this.InitializeSimulator(parameters);
+            int i = 0;
+            WaveResult waveResult;
+            do
             {
-                currentOrders.Clear();
-                IEnumerable<Order> res = orders.Where(order => order.WaveIndex == i);
-                if (res.Any())
-                {
-                    currentOrders.AddRange(res.ToList());
-                }
-                
+                waveResult=this.RunWave(CurrentWaveZombieParameters(parameters.HordeParameters,i),
+                      CurrentOrders(parameters.Orders,i),parameters.DamageDispatcher);
 
-                UserInterface.PrintMessage("Wave n° " + i);
-                
-                wave = new Wave(parameters.HordeParameters.Waves[i %parameters.HordeParameters.Waves.Length],city, parameters.DamageDispatcher, currentOrders);
-                
-                if (!city.Squad.IsAlive)
-                {
-                    waveResults.Add(wave.WaveResult);
-                    break;
-                }
-                else
-                {
-                    wave.Run();
-                    waveResults.Add(wave.WaveResult);
-                }
+                this.waveResults.Add(waveResult);
+                this.UserInterface.InvokeEndWave();
+                i++;
             }
+            while (i < parameters.WavesToRun && this.City.Squad.IsAlive);
+               
             return new Result(waveResults.ToArray());
         }
+
+        private WaveResult RunWave(ZombieParameter[] zombieParameters,List<Order> orders,IDamageDispatcher damageDispatcher)
+        {
+            Wave currentWave = new Wave(zombieParameters, this.City,orders,damageDispatcher);
+            this.City.OrderHandler.ExecuteOrders();
+
+            if (this.City.Squad.IsAlive)
+            {
+                currentWave.Run();
+            }
+            return currentWave.WaveResult;
+        }
+        
     }
 }

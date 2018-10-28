@@ -5,11 +5,6 @@ namespace Zarwin.Core.Entity.Cities
     {
         public int HealthPoints { get; private set; }
 
-        public Wall()
-        {
-            this.HealthPoints = 10;
-        }
-
         public Wall(int health)
         {
             this.HealthPoints = health;

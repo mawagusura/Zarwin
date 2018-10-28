@@ -1,6 +1,6 @@
 ﻿using Zarwin.Core.Entity.Cities;
 
-namespace Zarwin.Core.Entity.Soldiers.Weapons
+namespace Zarwin.Core.Entity.Squads.Weapons
 {
     public class Hand : Weapon 
     {

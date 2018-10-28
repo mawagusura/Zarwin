@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Zarwin.Shared.Contracts.Input;
 
-namespace Zarwin.Core.Entity.Zombies
+namespace Zarwin.Core.Entity.Waves
 {
     public class Zombie : IComparable<Zombie>
     {
-         
-
         public ZombieTrait Trait { get; }
 
         public ZombieType Type { get; }
@@ -17,10 +13,14 @@ namespace Zarwin.Core.Entity.Zombies
 
         private int LastTurn = -1;
 
-        public Zombie(ZombieParameter zombieParameter)
+        public int Id { get; }
+        
+
+        public Zombie(int id,ZombieTrait zombieTrait,ZombieType zombieType)
         {
-            Trait = zombieParameter.Trait;
-            Type = zombieParameter.Type;
+            this.Trait = zombieTrait;
+            this.Type = zombieType;
+            this.Id=id;
         }
 
         /// <summary> 
